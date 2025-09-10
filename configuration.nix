@@ -1,14 +1,20 @@
-{ config, pkgs, lib, hardware, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  hardware,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-       <nixos-hardware/framework/13-inch/7040-amd>
-      ./hardware-configuration.nix
-      ./vpn.nix
-      ./gaming.nix
-      ./powermanagement.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    <nixos-hardware/framework/13-inch/7040-amd>
+    ./hardware-configuration.nix
+    ./vpn.nix
+    ./gaming.nix
+    ./powermanagement.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -17,7 +23,8 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  boot.initrd.luks.devices."luks-baccf639-6b86-41fe-8ec3-a2ecb815b6a1".device = "/dev/disk/by-uuid/baccf639-6b86-41fe-8ec3-a2ecb815b6a1";
+  boot.initrd.luks.devices."luks-baccf639-6b86-41fe-8ec3-a2ecb815b6a1".device =
+    "/dev/disk/by-uuid/baccf639-6b86-41fe-8ec3-a2ecb815b6a1";
   networking.hostName = "ramapraca";
 
   # Enable networking
@@ -89,7 +96,11 @@
   users.users.artur9010 = {
     isNormalUser = true;
     description = "Artur Motyka";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+    ];
     packages = with pkgs; [
       # k8s
       pkgs.kubectl
@@ -116,8 +127,9 @@
     dua
     pkgs.ryzenadj
     pkgs.lm_sensors
+    pkgs.nixfmt-rfc-style
   ];
-  
+
   programs.bash.shellAliases = {
     ncdu = "dua i";
   };
