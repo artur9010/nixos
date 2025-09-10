@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, lib, hardware, ... }:
 
 {
@@ -9,6 +5,9 @@
     [ # Include the results of the hardware scan.
        <nixos-hardware/framework/13-inch/7040-amd>
       ./hardware-configuration.nix
+      ./vpn.nix
+      ./gaming.nix
+      ./powermanagement.nix
     ];
 
   # Bootloader.
@@ -86,26 +85,6 @@
   # Flatpak
   services.flatpak.enable = true;
 
-  # VPN
-  # Obejscie na gazomierzu zajebane z https://github.com/ncaq/dotfiles/blob/e628194155fdba694c9b76242a718024e973b857/nixos/host/seminar/vpn.nix
-  services.tailscale = {
-    enable = true;
-    useRoutingFeatures = "server"; # Exit Nodeとして動作
-    # [tailscale: Build failure with portlist tests on NixOS 25.05 - "seek /proc/net/tcp: illegal seek" · Issue #438765 · NixOS/nixpkgs](https://github.com/nixos/nixpkgs/issues/438765)
-    package = pkgs.tailscale.overrideAttrs (old: {
-      checkFlags = builtins.map (
-        flag:
-        if lib.hasPrefix "-skip=" flag then
-          flag + "|^TestGetList$|^TestIgnoreLocallyBoundPorts$|^TestPoller$"
-        else
-          flag
-      ) old.checkFlags;
-    });
-  };
-
-  # Steam
-  programs.steam.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.artur9010 = {
     isNormalUser = true;
@@ -122,8 +101,6 @@
       pkgs.vscode
       pkgs.vlc
       pkgs.thunderbird
-      # gierkowanie
-      pkgs.prismlauncher
     ];
   };
 
@@ -141,12 +118,6 @@
     pkgs.lm_sensors
   ];
   
-  # Ryzenadj requirement
-  #hardware.cpu.amd.ryzen-smu.enable = true;
-  boot.extraModulePackages = [
-    (config.boot.kernelPackages.callPackage /etc/nixos/pkgs/ryzen_smu { })
-  ];
-
   programs.bash.shellAliases = {
     ncdu = "dua i";
   };
