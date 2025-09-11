@@ -67,6 +67,9 @@
   # Configure console keymap
   console.keyMap = "pl2";
 
+  # Bluetooth
+  hardware.bluetooth.enable = true;
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -78,6 +81,15 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    wireplumber = {
+      enable = true;
+      # Disable handsfree profile autoswitch
+      extraConfig."51-disable-bluetooth-hfp" = {
+        "bluetooth_policy.policy" = {
+          "media-role.use-headset-profile" = false;
+        };
+      };
+    };
   };
   hardware.framework.laptop13.audioEnhancement.enable = true; # enable framework audio presets
 
