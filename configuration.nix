@@ -15,10 +15,14 @@
     ./gaming.nix
     ./powermanagement.nix
     ./desktop.nix
+    ./shell.nix
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    consoleMode = "2"; # fajnie jest moc cos przeczytac na ekranie
+  };
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
@@ -125,10 +129,6 @@
     nixfmt-rfc-style
     fw-ectool
   ];
-
-  programs.bash.shellAliases = {
-    ncdu = "dua i";
-  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
