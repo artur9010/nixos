@@ -25,6 +25,16 @@
   };
   users.defaultUserShell = lib.getExe pkgs.zsh;
 
+  environment.systemPackages = with pkgs; [
+    wget
+    btop-rocm
+    git
+    dua
+    rclone
+    rsync
+    restic
+  ];
+
   programs.bash.shellAliases = {
     ncdu = "dua i";
   };

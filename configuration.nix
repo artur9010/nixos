@@ -120,10 +120,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget
-    btop-rocm
-    git
-    dua
     ryzenadj
     lm_sensors
     nixfmt-rfc-style
