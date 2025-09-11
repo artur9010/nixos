@@ -2,9 +2,8 @@
 
 {
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm = {
+  services.xserver.displayManager.gdm = {
     enable = true;
-    wayland.enable = true;
   };
   services.desktopManager.plasma6.enable = true;
 
