@@ -8,7 +8,7 @@
 {
   # Ryzenadj
   environment.systemPackages = with pkgs; [
-    pkgs.ryzenadj
+    ryzenadj
   ];
 
   # Use a fork of ryzen_smu that supports newer CPUs, ryzenadj requires it.
@@ -17,6 +17,7 @@
   ];
 
   powerManagement.powertop.enable = true;
+  services.thermald.enable = true;
   # https://search.nixos.org/options?channel=25.05&query=tuned
   services.tuned = {
     enable = true;

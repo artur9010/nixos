@@ -23,6 +23,9 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.blacklistedKernelModules = [
+    "hid_lg_g15" # psuje sterowanie jasnoscia wewnetrznego ekranu jak mam podpiete glosniki
+  ];
 
   boot.initrd.luks.devices."luks-baccf639-6b86-41fe-8ec3-a2ecb815b6a1".device =
     "/dev/disk/by-uuid/baccf639-6b86-41fe-8ec3-a2ecb815b6a1";
@@ -71,13 +74,8 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
+  hardware.framework.laptop13.audioEnhancement.enable = true; # enable framework audio presets
 
   # Flatpak
   services.flatpak.enable = true;
@@ -93,15 +91,22 @@
     ];
     packages = with pkgs; [
       # k8s
-      pkgs.kubectl
-      pkgs.kubernetes-helm
-      pkgs.awscli
-      pkgs.sops
+      kubectl
+      kubernetes-helm
+      awscli
+      sops
       #
-      pkgs.floorp
-      pkgs.vscode
-      pkgs.vlc
-      pkgs.thunderbird
+      floorp
+      vscode
+      vlc
+      thunderbird
+      # chattin
+      telegram-desktop
+      mumble
+      # devel
+      jetbrains.idea-ultimate
+      jetbrains.datagrip
+      maven
     ];
   };
 
@@ -115,9 +120,10 @@
     btop-rocm
     git
     dua
-    pkgs.ryzenadj
-    pkgs.lm_sensors
-    pkgs.nixfmt-rfc-style
+    ryzenadj
+    lm_sensors
+    nixfmt-rfc-style
+    fw-ectool
   ];
 
   programs.bash.shellAliases = {
