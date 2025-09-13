@@ -27,18 +27,45 @@
           include = "laptop-battery-powersave";
         };
         video = {
-          "radeon_powersave" = "dpm-balanced"; #wkurwia jak zmienia sie kolorystyka
+          "radeon_powersave" = "dpm-balanced"; # wkurwia jak zmienia sie kolorystyka
+        };
+      };
+      framework-performance = {
+        main = {
+          include = "throughput-performance";
+        };
+        script = {
+          "script" = "\${i:PROFILE_DIR}/fanduty.sh";
         };
       };
     };
     ppdSettings = {
       profiles = {
         balanced = "desktop";
-        performance = "throughput-performance";
+        performance = "framework-performance";
         power-saver = "framework-powersave";
       };
     };
   };
   services.power-profiles-daemon.enable = false; # conflicts with tuned
   services.tlp.enable = false; # conflicts with tuned
+
+  # Custom tuned scripts
+  environment.etc = {
+    "tuned/profiles/framework-performance/fanduty.sh" = {
+      text = ''
+        #!/run/current-system/sw/bin/bash
+        case "$1" in
+          start)
+            /run/current-system/sw/bin/ectool fanduty 100
+          ;;
+          stop)
+            /run/current-system/sw/bin/ectool autofanctrl
+          ;;
+        esac
+      '';
+
+      mode = "0755";
+    };
+  };
 }
