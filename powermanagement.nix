@@ -27,7 +27,17 @@
           include = "laptop-battery-powersave";
         };
         video = {
-          "radeon_powersave" = "dpm-balanced"; # wkurwia jak zmienia sie kolorystyka
+          # wkurwia jak zmienia sie kolorystyka
+          "radeon_powersave" = "dpm-balanced";
+          "panel_power_savings" = "0";
+        };
+      };
+      framework-balanced = {
+        main = {
+          include = "desktop";
+        };
+        video = {
+          "radeon_powersave" = "dpm-balanced"; # zamiast "dpm-balance,auto"
         };
       };
       framework-performance = {
@@ -40,8 +50,11 @@
       };
     };
     ppdSettings = {
+      battery = {
+        balanced = "framework-balanced";
+      };
       profiles = {
-        balanced = "desktop";
+        balanced = "framework-balanced";
         performance = "framework-performance";
         power-saver = "framework-powersave";
       };

@@ -5,6 +5,8 @@
   services.xserver.displayManager.gdm = {
     enable = true;
   };
+  services.gnome.gnome-keyring.enable = true;
+  
   services.desktopManager.plasma6.enable = true;
 
   environment.plasma6.excludePackages = [

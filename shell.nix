@@ -33,6 +33,8 @@
     rclone
     rsync
     restic
+    usbutils #lsusb
+    pciutils #lspci
   ];
 
   programs.bash.shellAliases = {

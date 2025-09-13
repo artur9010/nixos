@@ -37,6 +37,8 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.wireless.enable = false; # disable wpa_supplicant
+  networking.wireless.iwd.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Warsaw";
@@ -91,7 +93,10 @@
       };
     };
   };
-  hardware.framework.laptop13.audioEnhancement.enable = true; # enable framework audio presets
+  hardware.framework.laptop13.audioEnhancement = {
+    enable = true; # enable framework audio presets
+    hideRawDevice = false;
+  };
 
   # Flatpak
   services.flatpak.enable = true;
@@ -119,6 +124,7 @@
       # chattin
       telegram-desktop
       mumble
+      lmstudio
       # devel
       jetbrains.idea-ultimate
       jetbrains.datagrip
@@ -136,6 +142,10 @@
     lm_sensors
     nixfmt-rfc-style
     fw-ectool
+  ];
+
+  boot.kernelParams = lib.mkAfter [
+    "amdgpu.dcdebugmask=0x0"
   ];
 
   # This value determines the NixOS release from which the default
