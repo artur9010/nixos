@@ -63,7 +63,7 @@
   services.power-profiles-daemon.enable = false; # conflicts with tuned
   services.tlp.enable = false; # conflicts with tuned
 
-  # Custom tuned scripts
+  # Custom tuned scripts, full fan and 30W of powerlimit on cpu for performance. 15W and auto for rest.
   environment.etc = {
     "tuned/profiles/framework-performance/fanduty.sh" = {
       text = ''
@@ -71,9 +71,11 @@
         case "$1" in
           start)
             /run/current-system/sw/bin/ectool fanduty 100
+            /run/current-system/sw/bin/ryzenadj -c 30000 -b 30000
           ;;
           stop)
             /run/current-system/sw/bin/ectool autofanctrl
+            /run/current-system/sw/bin/ryzenadj -c 15000 -b 15000
           ;;
         esac
       '';
