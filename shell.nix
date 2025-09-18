@@ -35,6 +35,10 @@
     restic
     usbutils #lsusb
     pciutils #lspci
+    dig
+    gnumake
+    jq
+    yq
   ];
 
   programs.bash.shellAliases = {
