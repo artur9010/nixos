@@ -98,9 +98,6 @@
     hideRawDevice = false;
   };
 
-  # Flatpak
-  services.flatpak.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.artur9010 = {
     isNormalUser = true;
@@ -117,7 +114,6 @@
       awscli
       sops
       #
-      floorp
       vscode
       vlc
       thunderbird
