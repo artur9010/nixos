@@ -9,13 +9,14 @@
 {
   imports = [
     # Include the results of the hardware scan.
-    <nixos-hardware/framework/13-inch/7040-amd>
     ./hardware-configuration.nix
     ./vpn.nix
     ./gaming.nix
     ./powermanagement.nix
     ./desktop.nix
     ./shell.nix
+    #
+    ./system/apple-fonts.nix
   ];
 
   # Bootloader.
