@@ -9,22 +9,38 @@
   fonts = {
     enableDefaultPackages = true;
     packages = [
+      inputs.apple-fonts.packages.${pkgs.system}.ny-nerd
       inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
       inputs.apple-fonts.packages.${pkgs.system}.sf-mono-nerd
+      inputs.apple-fonts.packages.${pkgs.system}.sf-compact-nerd
     ];
 
     fontconfig = {
       enable = true;
       defaultFonts = {
         sansSerif = [
-          "SFRounded Nerd Font"
+          "SFCompactRounded Nerd Font"
         ];
         serif = [
-          "SFRounded Nerd Font"
+          "NewYork Nerd Font"
         ];
-        monospace = [ "SFMono Nerd Font" ];
+        monospace = [
+          "SFMono Nerd Font"
+        ];
       };
       useEmbeddedBitmaps = true;
     };
   };
+
+  programs.dconf.profiles.user.databases = [
+    {
+      settings = {
+        "org/gnome/desktop/interface" = {
+          font-name = "SFCompactRounded Nerd Font 11";
+          monospace-font-name = "SFMono Nerd Font 11";
+          document-font-name = "NewYork Nerd Font 11";
+        };
+      };
+    }
+  ];
 }
