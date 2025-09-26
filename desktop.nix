@@ -136,6 +136,4 @@
   # Fix for Electron apps scaling on Wayland
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
   environment.sessionVariables.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-
-  services.flatpak.enable = true;
 }

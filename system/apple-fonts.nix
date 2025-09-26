@@ -8,6 +8,7 @@
 {
   fonts = {
     enableDefaultPackages = true;
+
     packages = [
       inputs.apple-fonts.packages.${pkgs.system}.ny-nerd
       inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd

@@ -1,5 +1,9 @@
 # NixOS config
 
+```
+sudo nixos-rebuild switch --flake .#ramapraca --show-trace
+```
+
 ## Flatpaks installed
 
 ```bash

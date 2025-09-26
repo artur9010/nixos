@@ -17,6 +17,7 @@
     ./shell.nix
     #
     ./system/apple-fonts.nix
+    ./system/flatpak.nix
   ];
 
   # Bootloader.
@@ -103,10 +104,6 @@
         };
       };
     };
-  };
-  hardware.framework.laptop13.audioEnhancement = {
-    enable = true; # enable framework audio presets
-    hideRawDevice = false;
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
