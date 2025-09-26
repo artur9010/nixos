@@ -39,70 +39,93 @@
     gnomeExtensions.user-themes
     gnomeExtensions.bluetooth-battery-meter
     gnomeExtensions.appindicator
+    gnomeExtensions.gtk4-desktop-icons-ng-ding
+    gnomeExtensions.gsconnect
+    gnomeExtensions.arcmenu
   ];
 
-  programs.dconf.profiles.user.databases = [
-    {
-      settings = {
-        "org/gnome/mutter" = {
-          # https://wiki.nixos.org/wiki/GNOME#Experimental_settings
-          experimental-features = [
-            "scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
-            "variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
+  programs.dconf = {
+    enable = true;
 
-            #"xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
-            # ^ causes to render minecraft at twice the resolution, related: https://gitlab.gnome.org/GNOME/mutter/-/issues/3704
-          ];
+    profiles.user.databases = [
+      {
+        settings = {
+          "org/gnome/mutter" = {
+            # https://wiki.nixos.org/wiki/GNOME#Experimental_settings
+            experimental-features = [
+              "scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
+              "variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
+
+              #"xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
+              # ^ causes to render minecraft at twice the resolution, related: https://gitlab.gnome.org/GNOME/mutter/-/issues/3704
+            ];
+
+            # Poki co arcmenu to nadpisuje i wywoluje swoje menu wiec super
+            # overlay-key = ""; # disable fcking activities shortcut
+          };
+
+          "org/gnome/desktop/interface" = {
+            enable-hot-corners = false;
+            font-hinting = "full";
+            color-scheme = "prefer-dark";
+            accent-color = "teal";
+            show-battery-percentage = true;
+          };
+
+          "org/gnome/desktop/wm/preferences" = {
+            button-layout = "appmenu:minimize,maximize,close";
+          };
+
+          "org/gnome/desktop/background" = {
+            picture-uri = "file:///home/artur9010/nixos/assets/wins25.jpg";
+            picture-uri-dark = "file:///home/artur9010/nixos/assets/wins25.jpg";
+          };
+
+          "org/gnome/desktop/screensaver" = {
+            restart-enabled = true;
+          };
+
+          "org/gnome/settings-daemon/plugins/power" = {
+            ambient-enabled = false;
+          };
+
+          "org/gnome/shell/extensions/Bluetooth-Battery-Meter" = {
+            enable-battery-level-icon = true;
+            enable-battery-percentage-icon = true;
+          };
+
+          "org/gnome/shell/extensions/dash-to-panel" = {
+            extension-version = lib.gvariant.mkInt32 68;
+            group-apps = false;
+            group-apps-underline-unfocused = false;
+            appicon-margin = lib.gvariant.mkInt32 2;
+            animate-appicon-hover = true;
+          };
+
+          "org/gnome/shell/extensions/arcmenu" = {
+            hide-overview-on-startup = true;
+            multi-monitor = true;
+            menu-layout = "Windows";
+            apps-show-extra-details = true;
+          };
+
+          "org/gnome/shell" = {
+            favorite-apps = "[]";
+            enabled-extensions = [
+              pkgs.gnomeExtensions.blur-my-shell.extensionUuid
+              pkgs.gnomeExtensions.dash-to-panel.extensionUuid
+              pkgs.gnomeExtensions.user-themes.extensionUuid
+              pkgs.gnomeExtensions.bluetooth-battery-meter.extensionUuid
+              pkgs.gnomeExtensions.appindicator.extensionUuid
+              pkgs.gnomeExtensions.gtk4-desktop-icons-ng-ding.extensionUuid
+              pkgs.gnomeExtensions.gsconnect.extensionUuid
+              pkgs.gnomeExtensions.arcmenu.extensionUuid
+            ];
+          };
         };
-
-        "org/gnome/shell" = {
-          enabled-extensions = [
-            pkgs.gnomeExtensions.blur-my-shell.extensionUuid
-            pkgs.gnomeExtensions.dash-to-panel.extensionUuid
-            pkgs.gnomeExtensions.user-themes.extensionUuid
-            pkgs.gnomeExtensions.bluetooth-battery-meter.extensionUuid
-            pkgs.gnomeExtensions.appindicator.extensionUuid
-          ];
-        };
-
-        # Dash to panel ext.
-        # Dump current settings using: `dconf dump /org/gnome/shell/extensions/dash-to-panel/`
-        # You can give result of that command to some LLM to rewrite it in Nix format, make sure to put everything as strings
-        "org/gnome/shell/extensions/dash-to-panel" = {
-          animate-appicon-hover-animation-extent = "{'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}";
-          appicon-margin = "2";
-          appicon-style = "NORMAL";
-          context-menu-entries = "[{\"title\":\"Terminal\",\"cmd\":\"gnome-terminal\"},{\"title\":\"System monitor\",\"cmd\":\"gnome-system-monitor\"},{\"title\":\"Files\",\"cmd\":\"nautilus\"},{\"title\":\"Extensions\",\"cmd\":\"gnome-extensions-app\"}]";
-          dot-position = "BOTTOM";
-          dot-style-focused = "DOTS";
-          dot-style-unfocused = "DOTS";
-          extension-version = "70";
-          global-border-radius = "0";
-          group-apps = "false";
-          hotkeys-overlay-combo = "TEMPORARILY";
-          intellihide = "false";
-          panel-anchors = "{\"DEL-F8P92S3\":\"MIDDLE\",\"BOE-0x00000000\":\"MIDDLE\"}";
-          panel-element-positions = "{\"DEL-F8P92S3\":[{\"element\":\"showAppsButton\",\"visible\":true,\"position\":\"stackedTL\"},{\"element\":\"activitiesButton\",\"visible\":false,\"position\":\"stackedTL\"},{\"element\":\"leftBox\",\"visible\":true,\"position\":\"stackedTL\"},{\"element\":\"taskbar\",\"visible\":true,\"position\":\"stackedTL\"},{\"element\":\"centerBox\",\"visible\":true,\"position\":\"stackedBR\"},{\"element\":\"rightBox\",\"visible\":true,\"position\":\"stackedBR\"},{\"element\":\"dateMenu\",\"visible\":true,\"position\":\"stackedBR\"},{\"element\":\"systemMenu\",\"visible\":true,\"position\":\"stackedBR\"},{\"element\":\"desktopButton\",\"visible\":true,\"position\":\"stackedBR\"}],\"BOE-0x00000000\":[{\"element\":\"showAppsButton\",\"visible\":true,\"position\":\"stackedTL\"},{\"element\":\"activitiesButton\",\"visible\":false,\"position\":\"stackedTL\"},{\"element\":\"leftBox\",\"visible\":true,\"position\":\"stackedTL\"},{\"element\":\"taskbar\",\"visible\":true,\"position\":\"stackedTL\"},{\"element\":\"centerBox\",\"visible\":true,\"position\":\"stackedBR\"},{\"element\":\"rightBox\",\"visible\":true,\"position\":\"stackedBR\"},{\"element\":\"dateMenu\",\"visible\":true,\"position\":\"stackedBR\"},{\"element\":\"systemMenu\",\"visible\":true,\"position\":\"stackedBR\"},{\"element\":\"desktopButton\",\"visible\":true,\"position\":\"stackedBR\"}]}";
-          panel-lengths = "{\"DEL-F8P92S3\":100,\"BOE-0x00000000\":100}";
-          panel-positions = "{\"DEL-F8P92S3\":\"BOTTOM\",\"BOE-0x00000000\":\"BOTTOM\"}";
-          panel-sizes = "{\"DEL-F8P92S3\":48,\"BOE-0x00000000\":48}";
-          prefs-opened = "false";
-          secondarymenu-contains-showdetails = "false";
-          show-apps-icon-file = "";
-          show-apps-icon-side-padding = "8";
-          stockgs-force-hotcorner = "false";
-          stockgs-keep-dash = "false";
-          stockgs-keep-top-panel = "false";
-          trans-use-border = "false";
-          trans-use-custom-bg = "false";
-          trans-use-custom-gradient = "true";
-          trans-use-custom-opacity = "false";
-          window-preview-title-position = "TOP";
-        };
-
-      };
-    }
-  ];
+      }
+    ];
+  };
 
   qt = {
     enable = true;

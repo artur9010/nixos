@@ -20,17 +20,22 @@
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot = {
-    enable = true;
-    consoleMode = "2"; # fajnie jest moc cos przeczytac na ekranie
-  };
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        consoleMode = "2"; # fajnie jest moc cos przeczytac na ekranie
+      };
+      efi = {
+        canTouchEfiVariables = true;
+      };
+    };
 
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.blacklistedKernelModules = [
-    "hid_lg_g15" # psuje sterowanie jasnoscia wewnetrznego ekranu jak mam podpiete glosniki
-  ];
+    kernelPackages = pkgs.linuxPackages_latest;
+    blacklistedKernelModules = [
+      "hid_lg_g15" # psuje sterowanie jasnoscia wewnetrznego ekranu jak mam podpiete glosniki
+    ];
+  };
 
   boot.initrd.luks.devices."luks-baccf639-6b86-41fe-8ec3-a2ecb815b6a1".device =
     "/dev/disk/by-uuid/baccf639-6b86-41fe-8ec3-a2ecb815b6a1";
@@ -41,7 +46,10 @@
   networking.wireless.enable = false; # disable wpa_supplicant
   networking.wireless.iwd.enable = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Set your time zone.
   time.timeZone = "Europe/Warsaw";
