@@ -41,6 +41,8 @@
   networking.wireless.enable = false; # disable wpa_supplicant
   networking.wireless.iwd.enable = true;
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Set your time zone.
   time.timeZone = "Europe/Warsaw";
 
