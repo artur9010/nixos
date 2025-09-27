@@ -9,6 +9,7 @@
   services.displayManager = {
     gdm = {
       enable = true;
+      banner = "rama.praca najlepszy kąkuter";
     };
   };
 
@@ -103,7 +104,7 @@
             appicon-margin = lib.gvariant.mkInt32 2;
             animate-appicon-hover = true;
             panel-element-positions = ''
-              {"BOE-0x00000000":[{"element":"showAppsButton","visible":false,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"stackedTL"},{"element":"centerBox","visible":true,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}
+              {"BOE-0x00000000":[{"element":"showAppsButton","visible":false,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"stackedTL"},{"element":"centerBox","visible":true,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}],"DEL-F8P92S3":[{"element":"showAppsButton","visible":false,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"stackedTL"},{"element":"centerBox","visible":true,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}
             '';
             trans-panel-opacity = 0.45;
             trans-use-custom-opacity = true;
@@ -127,7 +128,7 @@
           };
 
           "org/gnome/shell" = {
-            favorite-apps = "[]";
+            favorite-apps = lib.gvariant.mkTuple [ ];
             enabled-extensions = [
               pkgs.gnomeExtensions.blur-my-shell.extensionUuid
               pkgs.gnomeExtensions.dash-to-panel.extensionUuid
@@ -152,6 +153,13 @@
     platformTheme = "gnome";
     style = "adwaita-dark";
   };
+
+  # Remove unneeded shortcuts
+  # https://discourse.nixos.org/t/manage-printers-in-applications-list-while-cups-disabled/55909/2
+  environment.extraSetup = ''
+    rm -f $out/share/applications/cups.desktop
+    rm -f $out/share/applications/nixos-manual.desktop
+  '';
 
   # Fix for Electron apps scaling on Wayland
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
