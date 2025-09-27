@@ -18,6 +18,7 @@
     #
     ./system/apple-fonts.nix
     ./system/flatpak.nix
+    ./system/apps/ledger-live.nix
   ];
 
   # Bootloader.

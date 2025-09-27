@@ -15,15 +15,6 @@
       onCalendar = "daily";
     };
 
-    overrides = {
-      global = {
-        Environment = {
-          # Force correct theme for some GTK apps
-          GTK_THEME = "Adwaita:dark";
-        };
-      };
-    };
-
     packages = [
       "one.ablaze.floorp" # web browser
       "org.onlyoffice.desktopeditors"

@@ -30,9 +30,8 @@
 
   environment.systemPackages = with pkgs; [
     # apps
-    gnome-console
-    gnome-tweaks
     nautilus
+    gnome-console
     # gnome extensions
     gnomeExtensions.blur-my-shell
     gnomeExtensions.dash-to-panel
@@ -42,6 +41,9 @@
     gnomeExtensions.gtk4-desktop-icons-ng-ding
     gnomeExtensions.gsconnect
     gnomeExtensions.arcmenu
+    gnomeExtensions.caffeine
+    gnomeExtensions.search-light
+    gnomeExtensions.tailscale-qs
   ];
 
   programs.dconf = {
@@ -100,6 +102,12 @@
             group-apps-underline-unfocused = false;
             appicon-margin = lib.gvariant.mkInt32 2;
             animate-appicon-hover = true;
+            panel-element-positions = ''
+              {"BOE-0x00000000":[{"element":"showAppsButton","visible":false,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"stackedTL"},{"element":"centerBox","visible":true,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}
+            '';
+            trans-panel-opacity = 0.45;
+            trans-use-custom-opacity = true;
+            trans-use-dynamic-opacity = true;
           };
 
           "org/gnome/shell/extensions/arcmenu" = {
@@ -107,6 +115,15 @@
             multi-monitor = true;
             menu-layout = "Windows";
             apps-show-extra-details = true;
+          };
+
+          "org/gnome/shell/extensions/search-light" = {
+            shortcut-search = [ "<Control><Alt>space" ];
+            popup-at-cursor-monitor = true;
+          };
+
+          "org/gnome/tweaks" = {
+            show-extensions-notice = false;
           };
 
           "org/gnome/shell" = {
@@ -120,6 +137,9 @@
               pkgs.gnomeExtensions.gtk4-desktop-icons-ng-ding.extensionUuid
               pkgs.gnomeExtensions.gsconnect.extensionUuid
               pkgs.gnomeExtensions.arcmenu.extensionUuid
+              pkgs.gnomeExtensions.caffeine.extensionUuid
+              pkgs.gnomeExtensions.search-light.extensionUuid
+              pkgs.gnomeExtensions.tailscale-qs.extensionUuid
             ];
           };
         };
