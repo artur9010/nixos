@@ -33,6 +33,10 @@
     # apps
     nautilus
     gnome-console
+    gthumb # image viewer and basic editor
+    papers # document viewer
+    vlc
+
     # gnome extensions
     gnomeExtensions.blur-my-shell
     gnomeExtensions.dash-to-panel
