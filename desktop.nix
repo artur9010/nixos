@@ -32,7 +32,7 @@
   environment.systemPackages = with pkgs; [
     # apps
     nautilus
-    gnome-console
+    ptyxis # terminal emulator
     gthumb # image viewer and basic editor
     papers # document viewer
     vlc
