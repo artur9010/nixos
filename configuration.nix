@@ -20,6 +20,7 @@
     ./system/locale.nix
     ./system/gaming.nix
     ./system/apps/ledger-live.nix
+    # ./system/apps/eufymake-studio.nix
   ];
 
   # Bootloader.

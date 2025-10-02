@@ -33,10 +33,13 @@
       settings = {
         "org/gnome/desktop/input-sources" = {
           sources = [
-            (lib.gvariant.mkTuple ["xkb" "pl"])
+            (lib.gvariant.mkTuple [
+              "xkb"
+              "pl"
+            ])
           ];
         };
       };
     }
-  ];  
+  ];
 }

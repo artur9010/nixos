@@ -6,3 +6,8 @@ Rebuild system:
 ```
 sudo nixos-rebuild switch --flake .#ramapraca --show-trace
 ```
+
+## TODOs
+
+- replace floorp flatpak with floorp nix package, https://noogle.dev/f/pkgs/wrapFirefox ?
+- eufymake studio

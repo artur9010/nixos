@@ -68,15 +68,15 @@
   environment.etc = {
     "tuned/profiles/framework-performance/fanduty.sh" = {
       text = ''
-        #!/run/current-system/sw/bin/bash
+        #!${pkgs.bash}/bin/bash
         case "$1" in
           start)
-            /run/current-system/sw/bin/ectool fanduty 100
-            /run/current-system/sw/bin/ryzenadj -c 30000 -b 30000
+            ${lib.getExe pkgs.fw-ectool} fanduty 100
+            ${lib.getExe pkgs.ryzenadj} -c 30000 -b 30000
           ;;
           stop)
-            /run/current-system/sw/bin/ectool autofanctrl
-            /run/current-system/sw/bin/ryzenadj -c 15000 -b 15000
+            ${lib.getExe pkgs.fw-ectool} autofanctrl
+            ${lib.getExe pkgs.ryzenadj} -c 15000 -b 15000
           ;;
         esac
       '';
