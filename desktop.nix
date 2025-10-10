@@ -27,6 +27,7 @@
   environment.gnome.excludePackages = with pkgs; [
     gnome-tour
     gnome-user-docs
+    gnome-console
   ];
 
   environment.systemPackages = with pkgs; [
@@ -36,6 +37,16 @@
     gthumb # image viewer and basic editor
     papers # document viewer
     vlc
+    file-roller # archive manager
+    gnome-tweaks
+
+    # winboat
+    inputs.winboat.packages.${pkgs.system}.winboat
+    freerdp # requirement for winboat
+
+    # gnome themes
+    yaru-theme
+    morewaita-icon-theme
 
     # gnome extensions
     gnomeExtensions.blur-my-shell
@@ -49,6 +60,9 @@
     gnomeExtensions.caffeine
     gnomeExtensions.search-light
     gnomeExtensions.tailscale-qs
+
+    # hyprland
+    hyprland
   ];
 
   programs.dconf = {
@@ -77,15 +91,14 @@
             color-scheme = "prefer-dark";
             accent-color = "teal";
             show-battery-percentage = true;
+
+            # theme
+            cursor-theme = "Yaru";
+            icon-theme = "MoreWaita";
           };
 
           "org/gnome/desktop/wm/preferences" = {
             button-layout = "appmenu:minimize,maximize,close";
-          };
-
-          "org/gnome/desktop/background" = {
-            picture-uri = "file:///home/artur9010/nixos/assets/wins25.jpg";
-            picture-uri-dark = "file:///home/artur9010/nixos/assets/wins25.jpg";
           };
 
           "org/gnome/desktop/screensaver" = {

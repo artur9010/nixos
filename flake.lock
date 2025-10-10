@@ -90,6 +90,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1758690382,
+        "narHash": "sha256-NY3kSorgqE5LMm1LqNwGne3ZLMF2/ILgLpFr1fS4X3o=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e643668fd71b949c53f8626614b21ff71a07379d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "ny": {
       "flake": false,
       "locked": {
@@ -107,7 +123,8 @@
         "apple-fonts": "apple-fonts",
         "nix-flatpak": "nix-flatpak",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "winboat": "winboat"
       }
     },
     "sf-arabic": {
@@ -192,6 +209,25 @@
       "original": {
         "type": "file",
         "url": "https://devimages-cdn.apple.com/design/resources/download/SF-Pro.dmg"
+      }
+    },
+    "winboat": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1759912177,
+        "narHash": "sha256-dipBg3v7TSAUzqxj8B2V4UNEpkCiHHj/7zelUZgKbWs=",
+        "owner": "TibixDev",
+        "repo": "winboat",
+        "rev": "a01038e0828913b8aaac4bf4d67777a2999a50e1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "TibixDev",
+        "ref": "a01038e0828913b8aaac4bf4d67777a2999a50e1",
+        "repo": "winboat",
+        "type": "github"
       }
     }
   },

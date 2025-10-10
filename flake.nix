@@ -6,6 +6,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     apple-fonts.url = "github:Lyndeno/apple-fonts.nix";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.6.0";
+    winboat.url = "github:TibixDev/winboat/?ref=a01038e0828913b8aaac4bf4d67777a2999a50e1"; # 0.8.7 with correct sha256, commit https://github.com/TibixDev/winboat/commit/a01038e0828913b8aaac4bf4d67777a2999a50e1
   };
 
   outputs =
@@ -14,6 +15,7 @@
       nixpkgs,
       nixos-hardware,
       nix-flatpak,
+      winboat,
       ...
     }@inputs:
     let

@@ -19,6 +19,7 @@
     ./system/flatpak.nix
     ./system/locale.nix
     ./system/gaming.nix
+    ./system/virtualization.nix
     ./system/apps/ledger-live.nix
     # ./system/apps/eufymake-studio.nix
   ];
@@ -117,10 +118,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    ryzenadj
-    lm_sensors
     nixfmt-rfc-style
-    fw-ectool
   ];
 
   # This value determines the NixOS release from which the default
