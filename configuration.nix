@@ -56,6 +56,8 @@
     "flakes"
   ];
 
+  services.scx.enable = true;
+
   virtualisation.docker.enable = true;
 
   # Bluetooth

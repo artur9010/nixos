@@ -40,10 +40,6 @@
     file-roller # archive manager
     gnome-tweaks
 
-    # winboat
-    inputs.winboat.packages.${pkgs.system}.winboat
-    freerdp # requirement for winboat
-
     # gnome themes
     yaru-theme
     morewaita-icon-theme
@@ -60,9 +56,6 @@
     gnomeExtensions.caffeine
     gnomeExtensions.search-light
     gnomeExtensions.tailscale-qs
-
-    # hyprland
-    hyprland
   ];
 
   programs.dconf = {
