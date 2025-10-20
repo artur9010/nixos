@@ -87,6 +87,17 @@
     };
   };
 
+  # Lock charging to 80%
+  systemd.services.fw-ectool-charge-limit = {
+    description = "Set FW ECTOOL charge limit to 80%";
+    after = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${lib.getExe pkgs.fw-ectool} fwchargelimit 80";
+    };
+  };
+
   # Ananicy
   services.ananicy = {
     enable = true;
