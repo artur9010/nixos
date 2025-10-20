@@ -10,11 +10,10 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./vpn.nix
-    ./powermanagement.nix
-    ./desktop.nix
-    ./shell.nix
-    #
+    ./system/vpn.nix
+    ./system/powermanagement.nix
+    ./system/desktop.nix
+    ./system/shell.nix
     ./system/apple-fonts.nix
     ./system/flatpak.nix
     ./system/locale.nix
