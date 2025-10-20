@@ -39,6 +39,7 @@
     vlc
     file-roller # archive manager
     gnome-tweaks
+    brave
 
     # gnome themes
     yaru-theme
