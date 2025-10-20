@@ -18,7 +18,6 @@
     packages = [
       "one.ablaze.floorp" # web browser
       "org.onlyoffice.desktopeditors"
-      "de.schmidhuberj.tubefeeder" # youtube client
       "com.mattjakeman.ExtensionManager"
       "io.github.kolunmi.Bazaar"
     ];

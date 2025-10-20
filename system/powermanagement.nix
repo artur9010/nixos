@@ -30,7 +30,7 @@
           include = "laptop-battery-powersave";
         };
         video = {
-          # wkurwia jak zmienia sie kolorystyka
+          # fixes colors flickering on radeon when in powersave
           "radeon_powersave" = "dpm-balanced";
           "panel_power_savings" = "0";
         };
@@ -40,7 +40,7 @@
           include = "desktop";
         };
         video = {
-          "radeon_powersave" = "dpm-balanced"; # zamiast "dpm-balance,auto"
+          "radeon_powersave" = "dpm-balanced"; # default: "dpm-balance,auto"
         };
       };
       framework-performance = {
