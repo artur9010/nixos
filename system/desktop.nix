@@ -7,6 +7,10 @@
 
 {
   services.displayManager = {
+    sddm = {
+      enable = false;
+      wayland.enable = true;
+    };
     gdm = {
       enable = true;
       banner = "rama.praca najlepszy kąkuter";
@@ -14,8 +18,11 @@
   };
 
   services.desktopManager = {
-    gnome = {
+    plasma6 = {
       enable = true;
+    };
+    gnome = {
+      enable = false;
     };
   };
 
@@ -38,12 +45,12 @@
     papers # document viewer
     vlc
     file-roller # archive manager
-    gnome-tweaks
+#    gnome-tweaks
     brave
 
     # gnome themes
-    yaru-theme
-    morewaita-icon-theme
+ #   yaru-theme
+ #   morewaita-icon-theme
 
     # gnome extensions
     gnomeExtensions.blur-my-shell
@@ -159,11 +166,11 @@
     ];
   };
 
-  qt = {
-    enable = true;
-    platformTheme = "gnome";
-    style = "adwaita-dark";
-  };
+#  qt = {
+#    enable = true;
+#    platformTheme = "gnome";
+#    style = "adwaita-dark";
+#  };
 
   # Remove unneeded shortcuts
   # https://discourse.nixos.org/t/manage-printers-in-applications-list-while-cups-disabled/55909/2
