@@ -5,6 +5,10 @@
   ...
 }:
 
+# Useful links:
+# radeon_powersave - https://documentation.suse.com/sles/15-SP7/html/SLES-all/cha-tuning-tuned.html
+# https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/performance_tuning_guide/chap-red_hat_enterprise_linux-performance_tuning_guide-tuned
+
 {
   # Ryzenadj
   environment.systemPackages = with pkgs; [
@@ -30,9 +34,8 @@
           include = "laptop-battery-powersave";
         };
         video = {
-          # fixes colors flickering on radeon when in powersave
-          "radeon_powersave" = "dpm-balanced";
-          "panel_power_savings" = "0";
+          "radeon_powersave" = "dpm-battery";
+          "panel_power_savings" = "1";
         };
       };
       framework-balanced = {
@@ -46,6 +49,9 @@
       framework-performance = {
         main = {
           include = "throughput-performance";
+        };
+        video = {
+          "radeon_powersave" = "dpm-performance";
         };
         script = {
           "script" = "\${i:PROFILE_DIR}/fanduty.sh";
@@ -66,7 +72,7 @@
   services.power-profiles-daemon.enable = false; # conflicts with tuned
   services.tlp.enable = false; # conflicts with tuned
 
-  # Custom tuned scripts, full fan and 30W of powerlimit on cpu for performance. 15W and auto for rest.
+  # Custom tuned scripts
   environment.etc = {
     "tuned/profiles/framework-performance/fanduty.sh" = {
       text = ''
@@ -74,11 +80,9 @@
         case "$1" in
           start)
             ${lib.getExe pkgs.fw-ectool} fanduty 100
-            ${lib.getExe pkgs.ryzenadj} -c 30000 -b 30000
           ;;
           stop)
             ${lib.getExe pkgs.fw-ectool} autofanctrl
-            ${lib.getExe pkgs.ryzenadj} -c 15000 -b 15000
           ;;
         esac
       '';

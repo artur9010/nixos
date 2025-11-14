@@ -84,6 +84,10 @@
     };
   };
 
+  services.syncthing = {
+    enable = true;
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.artur9010 = {
     isNormalUser = true;
