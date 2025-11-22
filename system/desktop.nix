@@ -24,12 +24,6 @@
     gnome-keyring.enable = true; 
   };
 
-  environment.gnome.excludePackages = with pkgs; [
-    gnome-tour
-    gnome-user-docs
-    gnome-console
-  ];
-
   environment.systemPackages = with pkgs; [
     # apps
     vlc
