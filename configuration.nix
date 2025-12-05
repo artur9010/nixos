@@ -92,6 +92,7 @@
       "networkmanager"
       "wheel"
       "docker"
+      "dialout" # access to serial ports
     ];
     packages = with pkgs; [
       # k8s

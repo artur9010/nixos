@@ -18,7 +18,6 @@
     packages = [
       "one.ablaze.floorp" # web browser
       "org.onlyoffice.desktopeditors"
-      "com.mattjakeman.ExtensionManager"
       "io.github.kolunmi.Bazaar"
     ];
   };

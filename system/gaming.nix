@@ -8,6 +8,7 @@
 
   environment.systemPackages = with pkgs; [
     prismlauncher
+    luanti
 
     # moddin stuff
     nexusmods-app
