@@ -175,6 +175,12 @@ stdenv.mkDerivation rec {
       # Fix duplicate const in AppConfig.hpp
       sed -i 's/bool get_slice_times(const const std::string&/bool get_slice_times(const std::string\&/' src/libslic3r/AppConfig.hpp
       sed -i 's/bool set_slice_times(const const std::string&/bool set_slice_times(const std::string\&/' src/libslic3r/AppConfig.hpp
+
+      # Fix boost::filesystem::ofstream - use std::ofstream instead
+      sed -i 's/boost::filesystem::ofstream/std::ofstream/' src/libslic3r/PrintApply.cpp
+
+      # Fix boost::filesystem::change_extension - use path member function
+      sed -i 's/boost::filesystem::change_extension(filename, default_ext)/boost::filesystem::path(filename).replace_extension(default_ext).string()/' src/libslic3r/PrintBase.cpp
     '';
 
     cmakeFlags = [
