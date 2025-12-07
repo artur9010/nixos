@@ -6,6 +6,8 @@
   extra-cmake-modules,
   ninja,
   kdePackages,
+  libepoxy,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +34,13 @@ stdenv.mkDerivation rec {
     qt5compat
     qtwayland
     qtmultimedia
+    qttools  # Provides Qt6UiTools
+    
+    # X11 and OpenGL libraries for KWin effects
+    libepoxy
+    xorg.libX11
+    xorg.libxcb
+    xorg.xcbutil
     
     # KDE Frameworks 6
     kconfig
@@ -90,6 +99,10 @@ stdenv.mkDerivation rec {
     # Patch all C++ effects with the same component pattern
     for effect in kwin/effects_cpp/aeroglide kwin/effects_cpp/kde-effects-aeroglassblur kwin/effects_cpp/startupfeedback; do
       if [ -f "$effect/CMakeLists.txt" ]; then
+        # Make UiTools optional instead of required
+        sed -i 's/find_package(Qt6.*CONFIG REQUIRED COMPONENTS/find_package(Qt6 ''${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS/g' "$effect/CMakeLists.txt"
+        sed -i '/UiTools/d' "$effect/CMakeLists.txt"
+        
         sed -i '/find_package(KF6.*REQUIRED COMPONENTS$/,/^)$/{
           s|find_package(KF6.*REQUIRED COMPONENTS$|find_package(KF6Config ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6ConfigWidgets ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6CoreAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Crash ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6I18n ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6KIO ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Service ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Notifications ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6WidgetsAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6WindowSystem ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6GuiAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6KCMUtils ''${KF_MIN_VERSION} REQUIRED)\n    # Replaced multi-component|
           /^[[:space:]]*Config$/d
