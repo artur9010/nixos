@@ -165,6 +165,9 @@ stdenv.mkDerivation rec {
 
       # Remove deprecated boost/filesystem/string_file.hpp include (not used, removed in newer Boost)
       sed -i '/#include <boost\/filesystem\/string_file.hpp>/d' src/libslic3r/Format/bbs_3mf.cpp
+
+      # Fix boost::filesystem::extension() - use path member method instead
+      sed -i 's/boost::filesystem::extension(filePath)/filePath.extension().string()/' src/libslic3r/GCode/GCodeProcessor.cpp
     '';
 
     cmakeFlags = [
