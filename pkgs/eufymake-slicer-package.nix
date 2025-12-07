@@ -1,12 +1,47 @@
 {
-  inputs,
   pkgs,
   lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  wxGTK32,
+  binutils,
+  boost186,
+  cereal,
+  cgal_5,
+  curl,
+  dbus,
+  eigen,
+  expat,
+  glew,
+  glib,
+  glib-networking,
+  gmp,
+  gtk3,
+  hicolor-icon-theme,
+  ilmbase,
+  libpng,
+  mpfr,
+  nanosvg,
+  nlopt,
+  opencascade-occt_7_6_1,
+  openvdb,
+  qhull,
+  onetbb,
+  xorg,
+  libbgcode,
+  heatshrink,
+  catch2_3,
+  webkitgtk_4_1,
+  z3,
+  nlohmann_json,
+  systemd,
   ...
 }:
 
-let
-  eufymake-slicer = pkgs.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
     pname = "eufymake-slicer";
     version = "1.5.25";
 
@@ -19,14 +54,14 @@ let
 
     sourceRoot = "source/AnkerStudio";
 
-    nativeBuildInputs = with pkgs; [
+    nativeBuildInputs = [
       cmake
       pkg-config
       wrapGAppsHook3
       wxGTK32
     ];
 
-    buildInputs = with pkgs; [
+    buildInputs = [
       binutils
       boost186
       cereal
@@ -47,7 +82,7 @@ let
       (nanosvg.overrideAttrs (old: {
         pname = "nanosvg-fltk";
         version = "unstable-2022-12-22";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "fltk";
           repo = "nanosvg";
           rev = "abcd277ea45e9098bed752cf9c6875b533c0892f";
@@ -67,7 +102,7 @@ let
       webkitgtk_4_1
       z3
       nlohmann_json
-    ] ++ lib.optionals (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.systemd) [
+    ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemd) [
       systemd
     ];
 
@@ -76,10 +111,10 @@ let
     separateDebugInfo = true;
 
     # The build system uses custom logic for finding the nlopt library
-    NLOPT = pkgs.nlopt;
+    NLOPT = nlopt;
 
     # eufymake-slicer uses dlopen on `libudev.so` at runtime
-    NIX_LDFLAGS = lib.optionalString (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.systemd) "-ludev";
+    NIX_LDFLAGS = lib.optionalString (lib.meta.availableOn stdenv.hostPlatform systemd) "-ludev";
 
     prePatch = ''
       # Since version 2.5.0 of nlopt we need to link to libnlopt
@@ -149,11 +184,4 @@ let
       platforms = platforms.linux;
       mainProgram = "eufymake-slicer";
     };
-  };
-in
-{
-  # eufyMake Studio package
-  environment.systemPackages = [
-    eufymake-slicer
-  ];
-}
+  }

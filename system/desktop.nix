@@ -5,6 +5,9 @@
   ...
 }:
 
+let
+  eufymake-slicer = pkgs.callPackage ../pkgs/eufymake-slicer-package.nix {};
+in
 {
   services.displayManager = {
     # sddm has some weird issues with launching plasma session, it crashes after a minute of wait, idk why, gdm works fine anyway
@@ -28,6 +31,7 @@
     # apps
     vlc
     brave
+    eufymake-slicer
   ];
 
   # Remove unneeded shortcuts
