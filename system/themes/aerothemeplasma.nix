@@ -283,25 +283,32 @@ stdenv.mkDerivation rec {
     longDescription = ''
       AeroThemePlasma is a comprehensive theme that recreates the look and feel of Windows 7 on KDE Plasma 6.
       
-      This package includes:
-      - Compiled window decorations (SMOD decoration)
-      - C++ KWin effects (aeroglassblur, aeroglide, smodglow, etc.)
-      - C++ Plasma plasmoids (seventasks, systemtray, sevenstart, etc.)
-      - JavaScript-based KWin effects (fadingpopupsaero, loginaero, dimscreenaero, etc.)
+      This package includes compiled C++ components:
+      - ✅ SMOD window decoration (org.smod.smod.so + kcm_smoddecoration.so) - Windows 7 window borders and titlebars
+      - ✅ SevenTasks plasmoid (io.gitgud.wackyideas.seventasks.so) - Windows 7-style taskbar
+      - ✅ Volume plasmoid (io.gitgud.wackyideas.volume.so) - Windows 7-style volume control
+      
+      Plus all theme assets:
+      - JavaScript-based KWin effects (fadingpopupsaero, loginaero, dimscreenaero, squashaero, etc.)
       - QML-based Plasma plasmoids
       - Desktop themes and look-and-feel packages
-      - SDDM login themes
-      - Color schemes
-      - Aurorae window decorations
-      - Icons (Windows 7 Aero cursor theme)
-      - Kvantum Qt themes
+      - SDDM login themes with Windows 7 styling
+      - Color schemes (Windows 7 Aero theme colors)
+      - Aurorae SVG window decorations
+      - Windows 7 Aero cursor and icon theme
+      - Kvantum Qt widget themes
       
-      After installation, configure Plasma to use the AeroThemePlasma components through System Settings:
-      - Appearance > Window Decorations (select SMOD)
-      - Appearance > Global Theme
-      - Appearance > Colors
-      - Window Management > KWin Scripts
-      - Workspace > Startup and Shutdown > Login Screen (SDDM)
+      Note: Additional C++ KWin effects (aeroglassblur, aeroglide, smodglow) and plasmoids 
+      (sevenstart, systemtray, notifications) require KWin development headers with hardcoded 
+      paths that need further patching. The included components provide the core Windows 7 
+      visual experience.
+      
+      After installation, configure Plasma to use AeroThemePlasma:
+      - Appearance > Window Decorations - Select "SMOD" for Windows 7 window borders
+      - Appearance > Global Theme - Select "AeroThemePlasma"  
+      - Appearance > Colors - Select Windows 7 color scheme
+      - Window Management > KWin Scripts - Enable AeroThemePlasma effects
+      - Workspace > Startup and Shutdown > Login Screen (SDDM) - Select AeroThemePlasma theme
     '';
     homepage = "https://gitgud.io/wackyideas/aerothemeplasma";
     license = licenses.gpl3Plus;
