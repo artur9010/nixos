@@ -154,8 +154,9 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace-fail "set(OPEN_SOURCE OFF)" "set(OPEN_SOURCE ON)"
 
-    # Fix git merge conflict markers in ClipperUtils.hpp
-    sed -i '/^<<<<<<< HEAD$/,/^>>>>>>> 84b4984 (feat: 1\.5\.21 open source)$/d' src/libslic3r/ClipperUtils.hpp
+    # Fix git merge conflict markers in ClipperUtils.hpp - keep HEAD version
+    sed -i '/^<<<<<<< HEAD$/d' src/libslic3r/ClipperUtils.hpp
+    sed -i '/^=======$/,/^>>>>>>> 84b4984 (feat: 1\.5\.21 open source)$/d' src/libslic3r/ClipperUtils.hpp
 
     # Fix CGAL const correctness issues in MeshBoolean.cpp
     sed -i 's/for (auto &vi : vertices)/for (const auto \&vi : vertices)/' src/libslic3r/MeshBoolean.cpp
