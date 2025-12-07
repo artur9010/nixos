@@ -159,6 +159,9 @@ stdenv.mkDerivation rec {
       # Fix CGAL const correctness issues in MeshBoolean.cpp
       sed -i 's/for (auto &vi : vertices)/for (const auto \&vi : vertices)/' src/libslic3r/MeshBoolean.cpp
       sed -i 's/for (auto &face : faces)/for (const auto \&face : faces)/' src/libslic3r/MeshBoolean.cpp
+
+      # Fix comma operator misuse in ExtrusionProcessor.hpp (should be &&)
+      sed -i 's/if (move_dist > 2 \* scaled(line_width), distance_data_new.distance > EPSILON)/if (move_dist > 2 * scaled(line_width) \&\& distance_data_new.distance > EPSILON)/' src/libslic3r/GCode/ExtrusionProcessor.hpp
     '';
 
     cmakeFlags = [
