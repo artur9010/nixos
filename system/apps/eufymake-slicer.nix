@@ -8,13 +8,13 @@
 let
   eufymake-slicer = pkgs.stdenv.mkDerivation rec {
     pname = "eufymake-slicer";
-    version = "1.5.26";
+    version = "1.5.25";
 
     src = pkgs.fetchFromGitHub {
       owner = "eufymake";
       repo = "eufyMake-PrusaSlicer-Release";
-      rev = "bcad0b7e484c31362be2de4c4ab8620f59b69650";
-      hash = "sha256-W5sOk+wCtqV5N73O+WFCVNAPFhaXsvDIbIVDF9o2fPY=";
+      rev = "b34659667ecdf3cedd484d3082f2a5a31849945d"; # v1.5.25 tag
+      hash = "sha256-ioNRjZBTD6uWB9RDxjRAprSxfmngaZobAUQ3egS084o=";
     };
 
     sourceRoot = "source/AnkerStudio";
@@ -115,9 +115,17 @@ let
       substituteInPlace CMakeLists.txt \
         --replace-fail "set(OPEN_SOURCE OFF)" "set(OPEN_SOURCE ON)"
 
-      # Fix git merge conflict markers in ClipperUtils.hpp - keep HEAD version
-      sed -i '/^<<<<<<< HEAD$/d' src/libslic3r/ClipperUtils.hpp
-      sed -i '/^=======$/,/^>>>>>>> 84b4984 (feat: 1\.5\.21 open source)$/d' src/libslic3r/ClipperUtils.hpp
+      # Fix git merge conflict markers in version.inc - keep HEAD version (1.5.25)
+      sed -i '/^<<<<<<< HEAD$/,/^=======$/!b; /^<<<<<<< HEAD$/d; /^=======$/d' version.inc
+      sed -i '/^>>>>>>> 84b4984 (feat: 1\.5\.21 open source)$/,/^$/d' version.inc
+
+      # Fix git merge conflict markers in GcodeInfo.cpp - keep HEAD version
+      sed -i '/^<<<<<<< HEAD$/d' src/slic3r/Utils/GcodeInfo.cpp
+      sed -i '/^=======$/,/^>>>>>>> 84b4984 (feat: 1\.5\.21 open source)$/d' src/slic3r/Utils/GcodeInfo.cpp
+
+      # Fix git merge conflict markers in AnkerDevice.hpp - keep HEAD version
+      sed -i '/^<<<<<<< HEAD$/d' src/slic3r/GUI/AnkerDevice.hpp
+      sed -i '/^=======$/,/^>>>>>>> 84b4984 (feat: 1\.5\.21 open source)$/d' src/slic3r/GUI/AnkerDevice.hpp
 
       # Fix CGAL const correctness issues in MeshBoolean.cpp
       sed -i 's/for (auto &vi : vertices)/for (const auto \&vi : vertices)/' src/libslic3r/MeshBoolean.cpp

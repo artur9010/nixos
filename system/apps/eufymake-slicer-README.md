@@ -12,8 +12,9 @@
 4. ✅ Fixed OpenCASCADE version requirement (7.6.2 → 7.6.1)
 5. ✅ Fixed case-sensitivity issues in CMakeLists.txt (Calib.hpp → calib.hpp)
 6. ✅ Enabled OPEN_SOURCE mode to disable proprietary AnkerNet dependency (disables wireless/remote printing features)
-7. ✅ Resolved git merge conflict markers in ClipperUtils.hpp  
-8. ✅ Fixed CGAL const correctness issues in MeshBoolean.cpp
+7. ✅ Changed to v1.5.25 release (v1.5.26 has excessive unresolved merge conflicts)
+8. ✅ Resolved git merge conflict markers in version.inc, GcodeInfo.cpp, and AnkerDevice.hpp
+9. ✅ Fixed CGAL const correctness issues in MeshBoolean.cpp
 
 ## Blocking Issues (Upstream)
 
