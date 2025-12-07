@@ -162,6 +162,9 @@ stdenv.mkDerivation rec {
 
       # Fix comma operator misuse in ExtrusionProcessor.hpp (should be &&)
       sed -i 's/if (move_dist > 2 \* scaled(line_width), distance_data_new.distance > EPSILON)/if (move_dist > 2 * scaled(line_width) \&\& distance_data_new.distance > EPSILON)/' src/libslic3r/GCode/ExtrusionProcessor.hpp
+
+      # Remove deprecated boost/filesystem/string_file.hpp include (not used, removed in newer Boost)
+      sed -i '/#include <boost\/filesystem\/string_file.hpp>/d' src/libslic3r/Format/bbs_3mf.cpp
     '';
 
     cmakeFlags = [
