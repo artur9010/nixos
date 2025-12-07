@@ -168,6 +168,9 @@ stdenv.mkDerivation rec {
 
       # Fix boost::filesystem::extension() - use path member method instead
       sed -i 's/boost::filesystem::extension(filePath)/filePath.extension().string()/' src/libslic3r/GCode/GCodeProcessor.cpp
+
+      # Fix DLL_EXPORT for Linux (currently only handles __APPLE__ and Windows)
+      sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__) || defined(__linux__)/' src/anker_plungin/Interface\ Files/AnkerPlugin.hpp
     '';
 
     cmakeFlags = [
