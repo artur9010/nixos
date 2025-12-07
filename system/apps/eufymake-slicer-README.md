@@ -8,10 +8,10 @@
 
 1. ✅ Created Nix package definition based on PrusaSlicer package from nixpkgs
 2. ✅ Added necessary dependencies (boost, cgal, opencascade-occt, wxGTK32, etc.)
-3. ✅ Added package to `configuration.nix` and `desktop.nix`
+3. ✅ Added package to `configuration.nix`
 4. ✅ Fixed OpenCASCADE version requirement (7.6.2 → 7.6.1)
 5. ✅ Fixed case-sensitivity issues in CMakeLists.txt (Calib.hpp → calib.hpp)
-6. ✅ Enabled OPEN_SOURCE mode to disable proprietary AnkerNet dependency
+6. ✅ Enabled OPEN_SOURCE mode to disable proprietary AnkerNet dependency (disables wireless/remote printing features)
 7. ✅ Resolved git merge conflict markers in ClipperUtils.hpp  
 8. ✅ Fixed CGAL const correctness issues in MeshBoolean.cpp
 
@@ -76,18 +76,25 @@ environment.systemPackages = with pkgs; [
 
 ## Repository Structure
 
-- `eufymake-slicer-package.nix` - Main package derivation (follows PrusaSlicer structure)
-- `eufymake-slicer.nix` - NixOS module that installs the package
+- `eufymake-slicer.nix` - Complete package definition and NixOS module (follows PrusaSlicer structure)
 - Imported in:
-  - `configuration.nix` (line 22)
-  - `desktop.nix` (line 31)
+  - `configuration.nix` (line 23)
+
+## Important Notes
+
+⚠️ **OPEN_SOURCE Mode Impact**: The package is configured with `OPEN_SOURCE=ON`, which disables the proprietary `AnkerNet` networking module. This means:
+- ✅ The package can build without proprietary dependencies
+- ❌ **Wireless/remote printing features are disabled**
+- ❌ Real-time streaming from printer is disabled
+
+The main feature that differentiates eufyMake Studio from standard PrusaSlicer (remote printing control) will not work in this configuration.
 
 ## Build Command
 
 To attempt building (will fail with current errors):
 
 ```bash
-nix-build -E '(import <nixpkgs> {}).callPackage ./system/apps/eufymake-slicer-package.nix {}'
+nix-build '<nixpkgs>' -A eufymake-slicer
 ```
 
 ## Recommendation
