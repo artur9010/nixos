@@ -181,6 +181,12 @@ stdenv.mkDerivation rec {
 
       # Fix boost::filesystem::change_extension - use path member function
       sed -i 's/boost::filesystem::change_extension(filename, default_ext)/boost::filesystem::path(filename).replace_extension(default_ext).string()/' src/libslic3r/PrintBase.cpp
+
+      # Fix unterminated string in AnkerGUIConfig.hpp
+      sed -i 's/wxT(fonttype""))/wxT(fonttype))/' src/slic3r/GUI/Common/AnkerGUIConfig.hpp
+
+      # Fix case-sensitive wx header
+      sed -i 's|wx/Overlay.h|wx/overlay.h|' src/slic3r/GUI/AnkerVideo.hpp
     '';
 
     cmakeFlags = [
