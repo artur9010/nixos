@@ -60,18 +60,30 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Windows 7 theme for KDE Plasma 6 - Theme assets only (C++ components require manual compilation)";
+    description = "Windows 7 theme for KDE Plasma 6";
     longDescription = ''
-      AeroThemePlasma is a theme that recreates the look and feel of Windows 7 on KDE Plasma 6.
+      AeroThemePlasma is a comprehensive theme that recreates the look and feel of Windows 7 on KDE Plasma 6.
       
-      This package includes the theme assets (plasmoids, desktop themes, color schemes, icons, etc.)
-      that don't require compilation. The C++ components (window decorations, KWin effects) need to
-      be built separately following the project's installation instructions.
+      This package includes theme assets that work out of the box:
+      - KWin effects (JavaScript-based: fadingpopupsaero, loginaero, dimscreenaero, etc.)
+      - Plasma plasmoids (QML-based)
+      - Desktop themes and look-and-feel packages
+      - SDDM login themes
+      - Color schemes
+      - Aurorae window decorations
+      - Icons (Windows 7 Aero cursor theme)
+      - Kvantum Qt themes
       
-      To fully utilize this theme, you may need to:
-      1. Manually compile and install the window decoration
-      2. Manually compile and install C++ KWin effects
-      3. Configure Plasma to use the AeroThemePlasma components
+      Note: Some advanced C++ components (compiled window decorations, C++ KWin effects, C++ plasmoids)
+      require complex build dependencies that are challenging to package for NixOS. These components
+      can be manually compiled following the upstream project's instructions if needed. The majority
+      of the theme functionality is available through the assets included in this package.
+      
+      After installation, configure Plasma to use the AeroThemePlasma components through System Settings:
+      - Appearance > Global Theme
+      - Appearance > Colors
+      - Window Management > KWin Scripts
+      - Workspace > Startup and Shutdown > Login Screen (SDDM)
     '';
     homepage = "https://gitgud.io/wackyideas/aerothemeplasma";
     license = licenses.gpl3Plus;
