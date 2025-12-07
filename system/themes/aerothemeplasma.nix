@@ -74,8 +74,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
   
   postPatch = ''
-    # Patch kwin/decoration/CMakeLists.txt to replace multi-component find_package(KF6 ...)
-    # with individual find_package(KF6Component ...) calls
+    # Patch kwin/decoration/CMakeLists.txt
     sed -i '/find_package(KF6.*REQUIRED COMPONENTS$/,/WindowSystem)$/{
       s|find_package(KF6.*REQUIRED COMPONENTS$|find_package(KF6CoreAddons ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6ColorScheme ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6Config ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6GuiAddons ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6I18n ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6IconThemes ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6WindowSystem ''${KF6_MIN_VERSION} REQUIRED)\n    # Replaced multi-component find_package(KF6)|
       /^[[:space:]]*CoreAddons$/d
@@ -86,39 +85,57 @@ stdenv.mkDerivation rec {
       /^[[:space:]]*IconThemes$/d
       /^[[:space:]]*WindowSystem)$/d
     }' kwin/decoration/CMakeLists.txt
-    echo "Patched kwin/decoration/CMakeLists.txt"
+    echo "✓ Patched kwin/decoration"
     
-    # Patch kde-effects-aeroglassblur
-    if [ -f kwin/effects_cpp/kde-effects-aeroglassblur/CMakeLists.txt ]; then
-      sed -i '/find_package(KF6.*REQUIRED COMPONENTS$/,/^)$/{
-        s|find_package(KF6.*REQUIRED COMPONENTS$|find_package(KF6Config ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6ConfigWidgets ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6CoreAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Crash ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6I18n ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6KIO ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Service ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Notifications ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6WidgetsAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6WindowSystem ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6GuiAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6KCMUtils ''${KF_MIN_VERSION} REQUIRED)\n    # Replaced multi-component|
-        /^[[:space:]]*Config$/d
-        /^[[:space:]]*ConfigWidgets$/d
-        /^[[:space:]]*CoreAddons$/d
-        /^[[:space:]]*Crash$/d
-        /^[[:space:]]*#GlobalAccel$/d
-        /^[[:space:]]*I18n$/d
-        /^[[:space:]]*KIO$/d
-        /^[[:space:]]*Service$/d
-        /^[[:space:]]*#Init$/d
-        /^[[:space:]]*Notifications$/d
-        /^[[:space:]]*WidgetsAddons$/d
-        /^[[:space:]]*WindowSystem$/d
-        /^[[:space:]]*GuiAddons$/d
-        /^[[:space:]]*KCMUtils$/d
-        /^[[:space:]]*$/d
-        /^)$/d
-      }' kwin/effects_cpp/kde-effects-aeroglassblur/CMakeLists.txt
-      echo "Patched kde-effects-aeroglassblur/CMakeLists.txt"
-    fi
+    # Patch all C++ effects with the same component pattern
+    for effect in kwin/effects_cpp/aeroglide kwin/effects_cpp/kde-effects-aeroglassblur kwin/effects_cpp/startupfeedback; do
+      if [ -f "$effect/CMakeLists.txt" ]; then
+        sed -i '/find_package(KF6.*REQUIRED COMPONENTS$/,/^)$/{
+          s|find_package(KF6.*REQUIRED COMPONENTS$|find_package(KF6Config ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6ConfigWidgets ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6CoreAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Crash ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6I18n ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6KIO ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Service ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Notifications ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6WidgetsAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6WindowSystem ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6GuiAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6KCMUtils ''${KF_MIN_VERSION} REQUIRED)\n    # Replaced multi-component|
+          /^[[:space:]]*Config$/d
+          /^[[:space:]]*ConfigWidgets$/d
+          /^[[:space:]]*CoreAddons$/d
+          /^[[:space:]]*Crash$/d
+          /^[[:space:]]*#GlobalAccel$/d
+          /^[[:space:]]*I18n$/d
+          /^[[:space:]]*KIO$/d
+          /^[[:space:]]*Service$/d
+          /^[[:space:]]*#Init$/d
+          /^[[:space:]]*Notifications$/d
+          /^[[:space:]]*WidgetsAddons$/d
+          /^[[:space:]]*WindowSystem$/d
+          /^[[:space:]]*GuiAddons$/d
+          /^[[:space:]]*KCMUtils$/d
+          /^[[:space:]]*$/d
+          /^)$/d
+        }' "$effect/CMakeLists.txt"
+        echo "✓ Patched $(basename $effect)"
+      fi
+    done
     
-    # Patch other effects similarly - they likely have similar patterns
-    for effect_cmake in kwin/effects_cpp/*/CMakeLists.txt; do
-      if [ -f "$effect_cmake" ] && [ "$effect_cmake" != "kwin/effects_cpp/kde-effects-aeroglassblur/CMakeLists.txt" ]; then
-        # Try basic KF6 pattern replacement if present
-        if grep -q "find_package(KF6.*REQUIRED COMPONENTS" "$effect_cmake"; then
-          echo "Note: $effect_cmake has KF6 COMPONENTS pattern - may need specific patching"
-        fi
+    # Patch plasmoids - they have simpler patterns
+    for plasmoid in plasma/plasmoids/src/sevenstart_src plasma/plasmoids/src/seventasks_src plasma/plasmoids/src/volume_src; do
+      if [ -f "$plasmoid/CMakeLists.txt" ]; then
+        sed -i '/find_package(KF6 REQUIRED COMPONENTS$/,/^)$/{
+          s|find_package(KF6 REQUIRED COMPONENTS$|find_package(KF6I18n ''${KF_MIN_VERSION} REQUIRED)\n    # Replaced|
+          /^[[:space:]]*I18n$/d
+          /^)$/d
+        }' "$plasmoid/CMakeLists.txt"
+        echo "✓ Patched $(basename $plasmoid)"
+      fi
+    done
+    
+    # Patch systemtray and notifications (they have more components)
+    for plasmoid in plasma/plasmoids/src/systemtray_src plasma/plasmoids/src/notifications_src; do
+      if [ -f "$plasmoid/CMakeLists.txt" ] && grep -q "find_package(KF6 REQUIRED COMPONENTS" "$plasmoid/CMakeLists.txt"; then
+        # Extract and patch based on actual components
+        sed -i '/find_package(KF6 REQUIRED COMPONENTS$/,/^)$/{
+          s|find_package(KF6 REQUIRED COMPONENTS$|# Patched KF6 components|
+          /^)$/d
+        }' "$plasmoid/CMakeLists.txt"
+        # Add individual find_package calls after the comment
+        sed -i '/# Patched KF6 components/a\    find_package(KF6I18n ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Service ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Notifications ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6IconThemes ''${KF_MIN_VERSION} REQUIRED)' "$plasmoid/CMakeLists.txt"
+        echo "✓ Patched $(basename $plasmoid)"
       fi
     done
   '';
