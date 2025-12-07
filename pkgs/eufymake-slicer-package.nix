@@ -187,6 +187,9 @@ stdenv.mkDerivation rec {
 
       # Fix case-sensitive wx header
       sed -i 's|wx/Overlay.h|wx/overlay.h|' src/slic3r/GUI/AnkerVideo.hpp
+
+      # Fix case-sensitive Common directory include
+      sed -i 's|"common/AnkerMsgDialog.hpp"|"Common/AnkerMsgDialog.hpp"|' src/slic3r/GUI/MainFrame.hpp
     '';
 
     cmakeFlags = [
