@@ -54,19 +54,49 @@ stdenv.mkDerivation rec {
     kdePackages.qtsvg
   ];
 
-  # Run all install scripts
   postPatch = ''
-    patchShebangs compile.sh install_plasmoids.sh install_kwin_components.sh install_plasma_components.sh install_misc_components.sh
+    patchShebangs compile.sh
+    
+    # Patch install scripts to use our output directory
+    for script in kwin/decoration/install.sh kwin/effects_cpp/*/install.sh plasma/aerothemeplasma-kcmloader/install.sh; do
+      if [ -f "$script" ]; then
+        patchShebangs "$script"
+      fi
+    done
   '';
 
   buildPhase = ''
     runHook preBuild
     
-    bash compile.sh --ninja
-    bash install_plasmoids.sh --ninja
-    bash install_kwin_components.sh
-    bash install_plasma_components.sh
-    bash install_misc_components.sh
+    export HOME=$TMPDIR
+    
+    # Build the decoration
+    cd kwin/decoration
+    mkdir -p build
+    cd build
+    cmake -DCMAKE_INSTALL_PREFIX=$out -G Ninja ..
+    ninja
+    cd ../../..
+    
+    # Build the KCM loader
+    cd plasma/aerothemeplasma-kcmloader
+    mkdir -p build
+    cd build
+    cmake -DCMAKE_INSTALL_PREFIX=$out -G Ninja ..
+    ninja
+    cd ../../..
+    
+    # Build KWin effects
+    for effect in kwin/effects_cpp/*; do
+      if [ -d "$effect" ]; then
+        cd "$effect"
+        mkdir -p build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=$out -G Ninja ..
+        ninja
+        cd ../../../..
+      fi
+    done
     
     runHook postBuild
   '';
@@ -74,9 +104,43 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     
-    # The install scripts install to ~/.local/share by default
-    # We need to redirect this to $out
-    mkdir -p $out
+    mkdir -p $out/share
+    
+    # Install compiled components
+    cd kwin/decoration/build
+    ninja install
+    cd ../../..
+    
+    cd plasma/aerothemeplasma-kcmloader/build
+    ninja install
+    cd ../../..
+    
+    for effect in kwin/effects_cpp/*; do
+      if [ -d "$effect/build" ]; then
+        cd "$effect/build"
+        ninja install
+        cd ../../../..
+      fi
+    done
+    
+    # Copy KWin components
+    mkdir -p $out/share/kwin
+    cp -r kwin/effects $out/share/kwin/ || true
+    cp -r kwin/scripts $out/share/kwin/ || true
+    cp -r kwin/tabbox $out/share/kwin/ || true
+    cp -r kwin/outline $out/share/kwin/ || true
+    cp -r kwin/smod $out/share/ || true
+    
+    # Copy Plasma components
+    mkdir -p $out/share/plasma
+    cp -r plasma/plasmoids/* $out/share/plasma/plasmoids/ || true
+    cp -r plasma/desktoptheme $out/share/plasma/ || true
+    cp -r plasma/look-and-feel $out/share/plasma/ || true
+    
+    # Copy color schemes, window decorations, icons, etc
+    cp -r misc/color-schemes $out/share/ || true
+    cp -r misc/aurorae $out/share/ || true
+    cp -r misc/icons $out/share/ || true
     
     runHook postInstall
   '';
