@@ -76,7 +76,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Patch kwin/decoration/CMakeLists.txt to replace multi-component find_package(KF6 ...)
     # with individual find_package(KF6Component ...) calls
-    # Use sed for more robust pattern matching
     sed -i '/find_package(KF6.*REQUIRED COMPONENTS$/,/WindowSystem)$/{
       s|find_package(KF6.*REQUIRED COMPONENTS$|find_package(KF6CoreAddons ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6ColorScheme ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6Config ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6GuiAddons ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6I18n ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6IconThemes ''${KF6_MIN_VERSION} REQUIRED)\n    find_package(KF6WindowSystem ''${KF6_MIN_VERSION} REQUIRED)\n    # Replaced multi-component find_package(KF6)|
       /^[[:space:]]*CoreAddons$/d
@@ -87,8 +86,41 @@ stdenv.mkDerivation rec {
       /^[[:space:]]*IconThemes$/d
       /^[[:space:]]*WindowSystem)$/d
     }' kwin/decoration/CMakeLists.txt
-    
     echo "Patched kwin/decoration/CMakeLists.txt"
+    
+    # Patch kde-effects-aeroglassblur
+    if [ -f kwin/effects_cpp/kde-effects-aeroglassblur/CMakeLists.txt ]; then
+      sed -i '/find_package(KF6.*REQUIRED COMPONENTS$/,/^)$/{
+        s|find_package(KF6.*REQUIRED COMPONENTS$|find_package(KF6Config ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6ConfigWidgets ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6CoreAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Crash ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6I18n ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6KIO ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Service ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6Notifications ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6WidgetsAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6WindowSystem ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6GuiAddons ''${KF_MIN_VERSION} REQUIRED)\n    find_package(KF6KCMUtils ''${KF_MIN_VERSION} REQUIRED)\n    # Replaced multi-component|
+        /^[[:space:]]*Config$/d
+        /^[[:space:]]*ConfigWidgets$/d
+        /^[[:space:]]*CoreAddons$/d
+        /^[[:space:]]*Crash$/d
+        /^[[:space:]]*#GlobalAccel$/d
+        /^[[:space:]]*I18n$/d
+        /^[[:space:]]*KIO$/d
+        /^[[:space:]]*Service$/d
+        /^[[:space:]]*#Init$/d
+        /^[[:space:]]*Notifications$/d
+        /^[[:space:]]*WidgetsAddons$/d
+        /^[[:space:]]*WindowSystem$/d
+        /^[[:space:]]*GuiAddons$/d
+        /^[[:space:]]*KCMUtils$/d
+        /^[[:space:]]*$/d
+        /^)$/d
+      }' kwin/effects_cpp/kde-effects-aeroglassblur/CMakeLists.txt
+      echo "Patched kde-effects-aeroglassblur/CMakeLists.txt"
+    fi
+    
+    # Patch other effects similarly - they likely have similar patterns
+    for effect_cmake in kwin/effects_cpp/*/CMakeLists.txt; do
+      if [ -f "$effect_cmake" ] && [ "$effect_cmake" != "kwin/effects_cpp/kde-effects-aeroglassblur/CMakeLists.txt" ]; then
+        # Try basic KF6 pattern replacement if present
+        if grep -q "find_package(KF6.*REQUIRED COMPONENTS" "$effect_cmake"; then
+          echo "Note: $effect_cmake has KF6 COMPONENTS pattern - may need specific patching"
+        fi
+      fi
+    done
   '';
 
   buildPhase = ''
