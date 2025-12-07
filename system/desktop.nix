@@ -28,6 +28,8 @@
     # apps
     vlc
     brave
+    # themes
+    (pkgs.callPackage ./themes/aerothemeplasma.nix { })
   ];
 
   # Remove unneeded shortcuts
