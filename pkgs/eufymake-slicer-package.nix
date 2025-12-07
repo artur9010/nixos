@@ -133,10 +133,6 @@ stdenv.mkDerivation rec {
         rm cmake/modules/FindEXPAT.cmake
       fi
 
-      # Fix resources folder location
-      substituteInPlace src/CLI/Setup.cpp \
-        --replace-fail "#ifdef __APPLE__" "#if 0" || true
-
       # Relax OpenCASCADE version requirement to work with nixpkgs version
       substituteInPlace src/occt_wrapper/CMakeLists.txt \
         --replace-fail "find_package(OpenCASCADE 7.6.2 REQUIRED)" "find_package(OpenCASCADE 7.6.1 REQUIRED)"
@@ -146,9 +142,7 @@ stdenv.mkDerivation rec {
         --replace-fail "Calib.hpp" "calib.hpp" \
         --replace-fail "Calib.cpp" "calib.cpp"
 
-      # Enable OPEN_SOURCE mode to disable proprietary AnkerNet dependency
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "set(OPEN_SOURCE OFF)" "set(OPEN_SOURCE ON)"
+      # Note: OPEN_SOURCE is already ON in v1.5.25, no need to change it
 
       # Fix git merge conflict markers in version.inc - keep HEAD version (1.5.25)
       sed -i '/^<<<<<<< HEAD$/,/^=======$/!b; /^<<<<<<< HEAD$/d; /^=======$/d' version.inc
@@ -173,7 +167,6 @@ stdenv.mkDerivation rec {
       "-DSLIC3R_GTK=3"
       "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
       "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
-      "-DOPEN_SOURCE=ON"
     ];
 
     meta = with lib; {
