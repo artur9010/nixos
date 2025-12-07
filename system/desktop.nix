@@ -28,6 +28,7 @@
     # apps
     vlc
     brave
+    (pkgs.callPackage ./apps/eufymake-slicer-package.nix {})
   ];
 
   # Remove unneeded shortcuts

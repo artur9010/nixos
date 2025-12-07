@@ -20,6 +20,7 @@
     ./system/gaming.nix
     ./system/virtualization.nix
     ./system/apps/ledger-live.nix
+    ./system/apps/eufymake-slicer.nix
     # ./system/apps/eufymake-studio.nix
   ];
 
