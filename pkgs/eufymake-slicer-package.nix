@@ -171,6 +171,7 @@ stdenv.mkDerivation rec {
 
       # Fix DLL_EXPORT for Linux (currently only handles __APPLE__ and Windows)
       sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__) || defined(__linux__)/' src/anker_plungin/Interface\ Files/AnkerPlugin.hpp
+      sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__) || defined(__linux__)/' src/slic3r/GUI/AnkerNetModule/Interface\ Files/AnkerNetBase.h
 
       # Fix duplicate const in AppConfig.hpp
       sed -i 's/bool get_slice_times(const const std::string&/bool get_slice_times(const std::string\&/' src/libslic3r/AppConfig.hpp
