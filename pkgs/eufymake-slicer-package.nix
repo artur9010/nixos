@@ -195,11 +195,11 @@ stdenv.mkDerivation rec {
       # Fix duplicate function declarations in ImGuiWrapper.hpp (lines 317-320 duplicate 304-307)
       sed -i '317,320d' src/slic3r/GUI/ImGuiWrapper.hpp
 
-      # Fix duplicate TextAlignType enum in AnkerHyperlink.hpp (lines 17-20 duplicate 8-11)
-      sed -i '17,20d' src/slic3r/GUI/AnkerHyperlink.hpp
+      # Fix duplicate TextAlignType enum in AnkerHyperlink.hpp (lines 17-21 duplicate 8-12)
+      sed -i '17,21d' src/slic3r/GUI/AnkerHyperlink.hpp
 
-      # Fix duplicate AnkerDialogIconTextOkPanel class definition (lines 201-210 duplicate 121-130)
-      sed -i '201,210d' src/slic3r/GUI/Common/AnkerDialog.hpp
+      # Fix duplicate AnkerDialogIconTextOkPanel class - remove lines 201-214 (entire duplicate class)
+      sed -i '201,214d' src/slic3r/GUI/Common/AnkerDialog.hpp
     '';
 
     cmakeFlags = [
