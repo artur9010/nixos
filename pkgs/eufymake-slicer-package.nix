@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
       pkg-config
       wrapGAppsHook3
       wxGTK32
+      pkgs.perl
     ];
 
     buildInputs = [
@@ -169,9 +170,23 @@ stdenv.mkDerivation rec {
       # Fix boost::filesystem::extension() - use path member method instead
       sed -i 's/boost::filesystem::extension(filePath)/filePath.extension().string()/' src/libslic3r/GCode/GCodeProcessor.cpp
 
-      # Fix DLL_EXPORT for Linux (currently only handles __APPLE__ and Windows)
-      sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__) || defined(__linux__)/' "src/anker_plungin/Interface Files/AnkerPlugin.hpp"
-      sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__) || defined(__linux__)/' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
+      # Fix DLL_EXPORT for Linux - just remove DLL_EXPORT from all declarations
+      # AnkerNet plugin is loaded dynamically anyway, so we don't need export declarations
+      sed -i 's/class DLL_EXPORT /class /g' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
+      sed -i 's/struct DLL_EXPORT /struct /g' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
+      sed -i 's/enum DLL_EXPORT /enum /g' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
+      sed -i 's/class DLL_EXPORT /class /g' "src/anker_plungin/Interface Files/AnkerPlugin.hpp"
+      sed -i 's/struct DLL_EXPORT /struct /g' "src/anker_plungin/Interface Files/AnkerPlugin.hpp"
+      sed -i 's/enum DLL_EXPORT /enum /g' "src/anker_plungin/Interface Files/AnkerPlugin.hpp"
+      # Also remove any remaining _declspec references
+      sed -i 's/_\?_declspec(dllexport)//g' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
+      sed -i 's/_\?_declspec(dllexport)//g' "src/anker_plungin/Interface Files/AnkerPlugin.hpp"
+      sed -i 's/_\?_declspec(dllimport)//g' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
+      sed -i 's/_\?_declspec(dllimport)//g' "src/anker_plungin/Interface Files/AnkerPlugin.hpp"
+
+      # Add forward declarations for missing AnkerNet types
+      # These types are defined in the AnkerNet plugin which is loaded at runtime
+      sed -i '1i namespace AnkerNet { struct MsgCenterItem {}; struct MsgCenterConfig {}; struct MsgErrCodeInfo {}; }' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
 
       # Fix duplicate const in AppConfig.hpp
       sed -i 's/bool get_slice_times(const const std::string&/bool get_slice_times(const std::string\&/' src/libslic3r/AppConfig.hpp
@@ -188,6 +203,7 @@ stdenv.mkDerivation rec {
 
       # Fix case-sensitive wx header
       sed -i 's|wx/Overlay.h|wx/overlay.h|' src/slic3r/GUI/AnkerVideo.hpp
+      sed -i 's|wx/Overlay.h|wx/overlay.h|' src/slic3r/GUI/AnkerGcodePreviewToolBar.hpp
 
       # Fix case-sensitive Common directory include
       sed -i 's|"common/AnkerMsgDialog.hpp"|"Common/AnkerMsgDialog.hpp"|' src/slic3r/GUI/MainFrame.hpp
@@ -198,8 +214,79 @@ stdenv.mkDerivation rec {
       # Fix duplicate TextAlignType enum in AnkerHyperlink.hpp (lines 17-21 duplicate 8-12)
       sed -i '17,21d' src/slic3r/GUI/AnkerHyperlink.hpp
 
-      # Fix duplicate AnkerDialogIconTextOkPanel class - remove lines 201-214 (entire duplicate class)
-      sed -i '201,214d' src/slic3r/GUI/Common/AnkerDialog.hpp
+      # Fix duplicate AnkerDialogIconTextOkPanel class in AnkerDialog.hpp
+      # Delete the second occurrence using brace counting to handle nested structures
+      perl -i -ne '
+        BEGIN { $$count = 0; $$skip = 0; $$brace_depth = 0; }
+        if (/class AnkerDialogIconTextOkPanel/) {
+          $$count++;
+          if ($$count == 2) { $$skip = 1; $$brace_depth = 0; }
+        }
+        if ($$skip) {
+          $$brace_depth++ while /\{/g;
+          $$brace_depth-- while /\}/g;
+          if ($$brace_depth <= 0 && /};/) { $$skip = 0; next; }
+          next;
+        }
+        print;
+      ' src/slic3r/GUI/Common/AnkerDialog.hpp
+
+      # Fix AnkerMsgDialog missing base class - ensure it inherits from wxDialog
+      # If the class declaration is missing wxDialog inheritance, add it
+      sed -i 's/^class AnkerMsgDialog$/class AnkerMsgDialog : public wxDialog/' src/slic3r/GUI/Common/AnkerMsgDialog.hpp
+      sed -i 's/^class AnkerMsgDialog {$/class AnkerMsgDialog : public wxDialog {/' src/slic3r/GUI/Common/AnkerMsgDialog.hpp
+
+      # Fix duplicate RightSidePanelUpdateReason enum in Plater.hpp
+      # Delete the second occurrence of the enum (around line 123)
+      perl -i -ne '
+        BEGIN { $$count = 0; $$skip = 0; }
+        if (/^\s*enum RightSidePanelUpdateReason/) {
+          $$count++;
+          if ($$count == 2) { $$skip = 1; }
+        }
+        if ($$skip) {
+          if (/^\s*};/) { $$skip = 0; next; }
+          next;
+        }
+        print;
+      ' src/slic3r/GUI/Plater.hpp
+
+      # Fix duplicate set_mmu_render_data_from_model_volume function in 3DScene.cpp
+      # Delete the second occurrence (lines 315-334 based on error)
+      perl -i -ne '
+        BEGIN { $$count = 0; $$skip = 0; $$brace_depth = 0; }
+        if (/void GLVolume::set_mmu_render_data_from_model_volume/) {
+          $$count++;
+          if ($$count == 2) { $$skip = 1; $$brace_depth = 0; }
+        }
+        if ($$skip) {
+          $$brace_depth++ while /\{/g;
+          $$brace_depth-- while /\}/g;
+          if ($$brace_depth == 0 && /\}/) { $$skip = 0; next; }
+          next;
+        }
+        print;
+      ' src/slic3r/GUI/3DScene.cpp
+
+      # Fix duplicate functions in GLGizmoMeasure.cpp
+      perl -i -ne '
+        BEGIN { $$count_set = 0; $$count_update = 0; $$skip = 0; $$brace_depth = 0; }
+        if (/void GLGizmoMeasure::set_input_window_state/) {
+          $$count_set++;
+          if ($$count_set == 2) { $$skip = 1; $$brace_depth = 0; }
+        }
+        if (/void GLGizmoMeasure::update_input_window/) {
+          $$count_update++;
+          if ($$count_update == 2) { $$skip = 1; $$brace_depth = 0; }
+        }
+        if ($$skip) {
+          $$brace_depth++ while /\{/g;
+          $$brace_depth-- while /\}/g;
+          if ($$brace_depth == 0 && /\}/) { $$skip = 0; next; }
+          next;
+        }
+        print;
+      ' src/slic3r/GUI/Gizmos/GLGizmoMeasure.cpp
     '';
 
     cmakeFlags = [

@@ -39,7 +39,10 @@
     gnumake
     jq
     yq
+
+    # jejaj
     github-copilot-cli
+    claude-code
   ];
 
   programs.bash.shellAliases = {
