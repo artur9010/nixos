@@ -170,8 +170,8 @@ stdenv.mkDerivation rec {
       sed -i 's/boost::filesystem::extension(filePath)/filePath.extension().string()/' src/libslic3r/GCode/GCodeProcessor.cpp
 
       # Fix DLL_EXPORT for Linux (currently only handles __APPLE__ and Windows)
-      sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__) || defined(__linux__)/' src/anker_plungin/Interface\ Files/AnkerPlugin.hpp
-      sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__) || defined(__linux__)/' src/slic3r/GUI/AnkerNetModule/Interface\ Files/AnkerNetBase.h
+      sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__) || defined(__linux__)/' "src/anker_plungin/Interface Files/AnkerPlugin.hpp"
+      sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__) || defined(__linux__)/' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
 
       # Fix duplicate const in AppConfig.hpp
       sed -i 's/bool get_slice_times(const const std::string&/bool get_slice_times(const std::string\&/' src/libslic3r/AppConfig.hpp
@@ -191,6 +191,15 @@ stdenv.mkDerivation rec {
 
       # Fix case-sensitive Common directory include
       sed -i 's|"common/AnkerMsgDialog.hpp"|"Common/AnkerMsgDialog.hpp"|' src/slic3r/GUI/MainFrame.hpp
+
+      # Fix duplicate function declarations in ImGuiWrapper.hpp (lines 317-320 duplicate 304-307)
+      sed -i '317,320d' src/slic3r/GUI/ImGuiWrapper.hpp
+
+      # Fix duplicate TextAlignType enum in AnkerHyperlink.hpp (lines 17-20 duplicate 8-11)
+      sed -i '17,20d' src/slic3r/GUI/AnkerHyperlink.hpp
+
+      # Fix duplicate AnkerDialogIconTextOkPanel class definition (lines 201-210 duplicate 121-130)
+      sed -i '201,210d' src/slic3r/GUI/Common/AnkerDialog.hpp
     '';
 
     cmakeFlags = [
