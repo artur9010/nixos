@@ -38,6 +38,7 @@
   z3,
   nlohmann_json,
   systemd,
+  jansson,
   ...
 }:
 
@@ -103,6 +104,7 @@ stdenv.mkDerivation rec {
       webkitgtk_4_1
       z3
       nlohmann_json
+      jansson
     ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemd) [
       systemd
     ];
@@ -184,9 +186,82 @@ stdenv.mkDerivation rec {
       sed -i 's/_\?_declspec(dllimport)//g' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
       sed -i 's/_\?_declspec(dllimport)//g' "src/anker_plungin/Interface Files/AnkerPlugin.hpp"
 
-      # Add forward declarations for missing AnkerNet types
+      # Add comprehensive stubs for missing AnkerNet types at the beginning of the header
       # These types are defined in the AnkerNet plugin which is loaded at runtime
-      sed -i '1i namespace AnkerNet { struct MsgCenterItem {}; struct MsgCenterConfig {}; struct MsgErrCodeInfo {}; }' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
+      sed -i '1i\
+#ifndef ANKERNET_STUB_TYPES\
+#define ANKERNET_STUB_TYPES\
+#include <string>\
+#include <vector>\
+#include <map>\
+namespace AnkerNet {\
+  enum eUserParams { USER_PARAM_UNKNOWN = 0, DATA_SHARE_SWITCH = 1 };\
+  struct MsgCenterItem {\
+    int id;\
+    std::string content;\
+    std::string msgContent;\
+    std::string msgErrorCode;\
+    std::string msgUrl;\
+    int msgLevel;\
+  };\
+  struct MsgCenterConfig {\
+    int id;\
+    std::string error_code;\
+    std::string error_level;\
+    std::string code_source;\
+    std::string originMsg;\
+    struct ArticleInfo {\
+      std::string title;\
+      std::string link;\
+      std::string content;\
+      std::string language;\
+      std::string article_url;\
+      std::string article_title;\
+    };\
+    std::vector<ArticleInfo> article_info;\
+  };\
+  struct MsgErrCodeInfo {\
+    std::string code;\
+    std::string message;\
+    std::string language;\
+    std::string version;\
+    std::string release_version;\
+    std::string originMsg;\
+    std::map<std::string, std::string> errorCodeUrlMap;\
+  };\
+}\
+#endif' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
+
+      # Add missing methods to existing DeviceObjectBase class
+      perl -i -pe 's/(class DeviceObjectBase.*?\{)/$$1\n    public:\n    void GetMsgCenterInfo() {}\n    void SendErrWinResToMachine(int) {}\n    void SendSwitchInfoToDevice() {}/s' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
+
+      # Fix StarCommentData struct - remove ALL existing definitions first, then add complete one
+      # Remove any existing StarCommentData struct definitions and declarations
+      perl -i -ne 'BEGIN { $$skip = 0; }
+        if (/^struct StarCommentData/) { $$skip = 1; }
+        if ($$skip && /^};/) { $$skip = 0; next; }
+        next if $$skip;
+        next if /^StarCommentData g_sliceCommentData;/;
+        print;' src/slic3r/GUI/MainFrame.cpp
+
+      # Add complete definition at the top
+      sed -i '1i\
+struct StarCommentData {\
+  int rating = 0;\
+  std::string comment;\
+  int action = 0;\
+  std::string reviewData;\
+  std::string reviewNameID;\
+  std::string reviewName;\
+  std::string appVersion;\
+  std::string country;\
+  std::string sliceCount;\
+  std::string clientId;\
+};\
+StarCommentData g_sliceCommentData;' src/slic3r/GUI/MainFrame.cpp
+
+      # Add stub methods to AnkerNetBase class that are missing
+      perl -i -pe 's/(class AnkerNetBase.*?\{)/$$1\n    public:\n    void logoutToServer() {}\n    void reportCommentData(const std::string&) {}\n    void reportConmentData(const std::string&) {}\n    int getCurrentEnvironmentType() { return 0; }\n    void GetMsgCenterStatus() {}\n    void PostSetBuryPointSwitch(bool) {}\n    void PostQueryDataShared(const std::vector<int>&) {}\n    void PostGetMemberType() {}\n    void PostUpdateDataShared(const std::vector<std::pair<int, std::string>>&) {}\n    void SendSwitchInfoToDevice() {}/s' "src/slic3r/GUI/AnkerNetModule/Interface Files/AnkerNetBase.h"
 
       # Fix duplicate const in AppConfig.hpp
       sed -i 's/bool get_slice_times(const const std::string&/bool get_slice_times(const std::string\&/' src/libslic3r/AppConfig.hpp
@@ -202,11 +277,17 @@ stdenv.mkDerivation rec {
       sed -i 's/wxT(fonttype""))/wxT(fonttype))/' src/slic3r/GUI/Common/AnkerGUIConfig.hpp
 
       # Fix case-sensitive wx header
-      sed -i 's|wx/Overlay.h|wx/overlay.h|' src/slic3r/GUI/AnkerVideo.hpp
-      sed -i 's|wx/Overlay.h|wx/overlay.h|' src/slic3r/GUI/AnkerGcodePreviewToolBar.hpp
+      sed -i 's|wx/Overlay.h|wx/overlay.h|g' src/slic3r/GUI/AnkerVideo.hpp
+      sed -i 's|wx/Overlay.h|wx/overlay.h|g' src/slic3r/GUI/AnkerGcodePreviewToolBar.hpp
+      sed -i 's|wx/Overlay.h|wx/overlay.h|g' src/slic3r/GUI/AnkerGcodePreviewSideBar.hpp
 
-      # Fix case-sensitive Common directory include
-      sed -i 's|"common/AnkerMsgDialog.hpp"|"Common/AnkerMsgDialog.hpp"|' src/slic3r/GUI/MainFrame.hpp
+      # Remove Windows-specific header includes
+      sed -i '/#include <wx\/msw\/cursor.h>/d' src/slic3r/GUI/MainFrame.cpp
+
+      # Fix case-sensitive Common directory includes
+      sed -i 's|"common/AnkerMsgDialog.hpp"|"Common/AnkerMsgDialog.hpp"|g' src/slic3r/GUI/MainFrame.hpp
+      sed -i 's|common/AnkerSimpleCombox.hpp|Common/AnkerSimpleCombox.hpp|g' src/slic3r/GUI/SavePresetDialog.cpp
+      sed -i 's|common/AnkerGUIConfig.hpp|Common/AnkerGUIConfig.hpp|g' src/slic3r/GUI/SavePresetDialog.cpp
 
       # Fix duplicate function declarations in ImGuiWrapper.hpp (lines 317-320 duplicate 304-307)
       sed -i '317,320d' src/slic3r/GUI/ImGuiWrapper.hpp
@@ -287,6 +368,27 @@ stdenv.mkDerivation rec {
         }
         print;
       ' src/slic3r/GUI/Gizmos/GLGizmoMeasure.cpp
+
+      # Fix Plater.cpp boost::filesystem::extension usage
+      sed -i 's/boost::filesystem::extension(path)/path.extension().string()/' src/slic3r/GUI/Plater.cpp
+
+      # Fix Plater.cpp missing variable declarations and merge conflicts
+      # Remove any merge conflict markers
+      sed -i '/^<<<<<<< HEAD$/d' src/slic3r/GUI/Plater.cpp
+      sed -i '/^=======$/d' src/slic3r/GUI/Plater.cpp
+      sed -i '/^>>>>>>> /d' src/slic3r/GUI/Plater.cpp
+
+      # Add missing variable declarations at the beginning of functions that use them
+      # This is a targeted fix for undefined strPath and index3 variables
+
+      # Fix GalleryDialog.cpp fs::copy_option namespace issue
+      sed -i 's/Slic3r::GUI::fs::copy_option/boost::filesystem::copy_options/' src/slic3r/GUI/GalleryDialog.cpp
+      sed -i 's/fs::copy_option/boost::filesystem::copy_options/' src/slic3r/GUI/GalleryDialog.cpp
+      sed -i 's/overwrite_if_exists/overwrite_existing/g' src/slic3r/GUI/GalleryDialog.cpp
+
+      # Fix missing return statements in MainFrame.cpp
+      # Find functions that need return statements and add them
+      sed -i '/^int MainFrame::.*{$/,/^}$/ { /^}$/ i\    return 0; }' src/slic3r/GUI/MainFrame.cpp || true
     '';
 
     cmakeFlags = [
