@@ -28,6 +28,7 @@
     # apps
     vlc
     brave
+    antigravity
   ];
 
   # Remove unneeded shortcuts
