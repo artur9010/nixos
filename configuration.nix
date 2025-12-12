@@ -19,6 +19,7 @@
     ./system/locale.nix
     ./system/gaming.nix
     ./system/virtualization.nix
+    ./system/ai.nix
     ./system/apps/ledger-live.nix
     # ./system/apps/eufymake-studio.nix
   ];
