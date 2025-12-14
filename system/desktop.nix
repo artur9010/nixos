@@ -29,6 +29,7 @@
     vlc
     brave
     antigravity
+    anydesk
   ];
 
   # Remove unneeded shortcuts
