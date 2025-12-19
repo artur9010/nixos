@@ -30,6 +30,7 @@
     brave
     antigravity
     anydesk
+    zed-editor
   ];
 
   # Remove unneeded shortcuts
