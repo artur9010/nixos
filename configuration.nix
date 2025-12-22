@@ -57,9 +57,15 @@
     "flakes"
   ];
 
-  services.scx.enable = true;
+  # scx scheduler disabled - it's performance-focused and hurts battery life
+  # ananicy-cpp in powermanagement.nix handles process prioritization instead
+  services.scx.enable = false;
 
-  virtualisation.docker.enable = true;
+  # Docker with socket activation - only starts when actually used
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false; # Don't start on boot, use socket activation instead
+  };
 
   # Bluetooth
   hardware.bluetooth.enable = true;
@@ -110,7 +116,7 @@
       mumble
       lmstudio
       # devel
-      jetbrains.idea-ultimate
+      jetbrains.idea
       jetbrains.datagrip
       maven
     ];
