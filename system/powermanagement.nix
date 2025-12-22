@@ -79,12 +79,5 @@
     ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
     # USB autosuspend
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="auto"
-
-    # AMDGPU panel power savings - PPD 0.30 should do this but doesn't detect it on NixOS
-    # Set panel_power_savings based on AC/battery state (0-4, higher = more aggressive)
-    # On battery: enable panel power savings (level 3)
-    SUBSYSTEM=="power_supply", ATTR{type}=="Mains", ATTR{online}=="0", RUN+="${pkgs.bash}/bin/bash -c 'echo 3 > /sys/class/drm/card1-eDP-1/amdgpu/panel_power_savings'"
-    # On AC: disable panel power savings
-    SUBSYSTEM=="power_supply", ATTR{type}=="Mains", ATTR{online}=="1", RUN+="${pkgs.bash}/bin/bash -c 'echo 0 > /sys/class/drm/card1-eDP-1/amdgpu/panel_power_savings'"
   '';
 }
