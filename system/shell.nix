@@ -39,6 +39,9 @@
     gnumake
     jq
     yq
+    #
+    goaccess
+    duf
   ];
 
   programs.bash.shellAliases = {

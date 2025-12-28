@@ -5,49 +5,93 @@
   ...
 }:
 
-# AMD Framework 13 7040 Power Management
-# References:
-# - https://community.frame.work/t/guide-fw13-ryzen-power-management/42988
-# - https://wiki.archlinux.org/title/Framework_Laptop_13_(AMD_Ryzen_7040_Series)
-# - https://github.com/NixOS/nixos-hardware/blob/master/framework/13-inch/common/amd.nix
+# Useful links:
+# radeon_powersave - https://documentation.suse.com/sles/15-SP7/html/SLES-all/cha-tuning-tuned.html
+# https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/performance_tuning_guide/chap-red_hat_enterprise_linux-performance_tuning_guide-tuned
 
 {
-  # Power management tools
+  # Ryzenadj
   environment.systemPackages = with pkgs; [
+    ryzenadj
     powertop
     fw-ectool
     lm_sensors
   ];
 
-  # Power-profiles-daemon - recommended by AMD and Framework for Ryzen 7040
-  # PPD 0.20+ supports AMDGPU panel power savings automatically
-  services.power-profiles-daemon.enable = true;
-
-  # Disable conflicting power managers
-  services.tlp.enable = false;
-  services.tuned.enable = false;
-  # thermald is Intel-only, does nothing on AMD
-  services.thermald.enable = false;
-
-  # Powertop auto-tune for misc power savings
-  powerManagement.powertop.enable = true;
-
-  # Kernel parameters for power efficiency
-  boot.kernelParams = [
-    # Fix for AMDGPU display hangs (recommended by Framework/nixos-hardware)
-    "amdgpu.dcdebugmask=0x10"
-    # RTC CMOS workaround for hibernate (kernel < 6.8)
-    "rtc_cmos.use_acpi_alarm=1"
+  # Use a fork of ryzen_smu that supports newer CPUs, ryzenadj requires it.
+  boot.extraModulePackages = [
+    (config.boot.kernelPackages.callPackage ./../pkgs/ryzen_smu { })
   ];
 
-  # Ananicy for process prioritization (works with kernel scheduler, doesn't replace it)
-  services.ananicy = {
+  powerManagement.powertop.enable = true;
+  services.thermald.enable = true;
+  # https://search.nixos.org/options?channel=25.05&query=tuned
+  services.tuned = {
     enable = true;
-    package = pkgs.ananicy-cpp;
-    rulesProvider = pkgs.ananicy-rules-cachyos;
+    profiles = {
+      framework-powersave = {
+        main = {
+          include = "laptop-battery-powersave";
+        };
+        video = {
+          "radeon_powersave" = "dpm-battery";
+          "panel_power_savings" = "1";
+        };
+      };
+      framework-balanced = {
+        main = {
+          include = "desktop";
+        };
+        video = {
+          "radeon_powersave" = "dpm-balanced"; # default: "dpm-balance,auto"
+        };
+      };
+      framework-performance = {
+        main = {
+          include = "throughput-performance";
+        };
+        video = {
+          "radeon_powersave" = "dpm-performance";
+        };
+        script = {
+          "script" = "\${i:PROFILE_DIR}/fanduty.sh";
+        };
+      };
+    };
+    ppdSettings = {
+      battery = {
+        balanced = "framework-balanced";
+      };
+      profiles = {
+        balanced = "framework-balanced";
+        performance = "framework-performance";
+        power-saver = "framework-powersave";
+      };
+    };
+  };
+  services.power-profiles-daemon.enable = false; # conflicts with tuned
+  services.tlp.enable = false; # conflicts with tuned
+
+  # Custom tuned scripts
+  environment.etc = {
+    "tuned/profiles/framework-performance/fanduty.sh" = {
+      text = ''
+        #!${pkgs.bash}/bin/bash
+        case "$1" in
+          start)
+            ${lib.getExe pkgs.fw-ectool} fanduty 100
+          ;;
+          stop)
+            ${lib.getExe pkgs.fw-ectool} autofanctrl
+          ;;
+        esac
+      '';
+
+      mode = "0755";
+    };
   };
 
-  # Lock charging to 80% for battery longevity
+  # Lock charging to 80%
   systemd.services.fw-ectool-charge-limit = {
     description = "Set FW ECTOOL charge limit to 80%";
     after = [ "multi-user.target" ];
@@ -58,26 +102,10 @@
     };
   };
 
-  # Suspend-then-hibernate: suspend first, hibernate after 2 hours
-  # This saves more battery during long sleep periods
-  systemd.sleep.extraConfig = ''
-    HibernateDelaySec=2h
-  '';
-  services.logind.settings.Login = {
-    HandleLidSwitch = "suspend-then-hibernate";
-    HandleLidSwitchExternalPower = "suspend";
+  # Ananicy
+  services.ananicy = {
+    enable = true;
+    package = pkgs.ananicy-cpp;
+    rulesProvider = pkgs.ananicy-rules-cachyos;
   };
-
-  # Audio power saving
-  boot.extraModprobeConfig = ''
-    options snd_hda_intel power_save=1
-  '';
-
-  # udev rules for power management
-  services.udev.extraRules = ''
-    # Enable runtime PM for all PCI devices
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
-    # USB autosuspend
-    ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="auto"
-  '';
 }
