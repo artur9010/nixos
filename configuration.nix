@@ -49,7 +49,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.wireless.enable = false; # disable wpa_supplicant
+  networking.wireless.enable = lib.mkForce false; # disable wpa_supplicant (override nixos-hardware)
   networking.wireless.iwd.enable = true;
 
   nix.settings.experimental-features = [
