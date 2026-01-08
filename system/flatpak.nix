@@ -19,6 +19,9 @@
       "one.ablaze.floorp" # web browser
       "org.onlyoffice.desktopeditors"
       "io.github.kolunmi.Bazaar"
+
+      # gaming
+      "io.github.streetpea.Chiaki4deck" # grajdworzec zdalny kubus play
     ];
   };
 

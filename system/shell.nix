@@ -42,6 +42,13 @@
     #
     goaccess
     duf
+
+    # k8s tools
+    kubectl
+    kubernetes-helm
+    awscli
+    sops
+    ktop
   ];
 
   programs.bash.shellAliases = {

@@ -48,9 +48,8 @@
   networking.hostName = "ramapraca";
 
   # Enable networking
+  # wpa-supplicant is enabled as nixos-hardware module
   networking.networkmanager.enable = true;
-  networking.wireless.enable = lib.mkForce false; # disable wpa_supplicant (override nixos-hardware)
-  networking.wireless.iwd.enable = true;
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -103,11 +102,6 @@
       "dialout" # access to serial ports
     ];
     packages = with pkgs; [
-      # k8s
-      kubectl
-      kubernetes-helm
-      awscli
-      sops
       #
       vscode
       thunderbird
@@ -128,7 +122,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    nixfmt-rfc-style
+    nixfmt
   ];
 
   # This value determines the NixOS release from which the default

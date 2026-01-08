@@ -15,7 +15,7 @@ nixos-rebuild dry-build --flake .#ramapraca --show-trace
 nixos-rebuild build --flake .#ramapraca --show-trace
 
 # Format nix files
-nix-shell -p nixfmt-rfc-style --run "nixfmt file.nix"
+nix-shell -p nixfmt --run "nixfmt file.nix"
 
 # Update flake inputs
 nix flake update

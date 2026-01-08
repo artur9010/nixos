@@ -9,7 +9,6 @@
   environment.systemPackages = with pkgs; [
     prismlauncher
     luanti
-    chiaki-ng # grajdworzec gra zdalna klient
 
     # moddin stuff
     nexusmods-app

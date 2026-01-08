@@ -39,6 +39,7 @@ let
       -p ReadWritePaths="$HOME/.cache" \
       -p ReadWritePaths="$HOME/.m2" \
       -p ReadWritePaths="$HOME/.npm" \
+      -p ReadWritePaths="$HOME/.config/claude-code" \
       ${pkgs.claude-code}/bin/claude "$@"
   '';
 in {
