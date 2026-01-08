@@ -28,7 +28,6 @@
     # apps
     vlc
     brave
-    antigravity
     anydesk
     zed-editor
   ];
