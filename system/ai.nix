@@ -48,5 +48,10 @@ in {
     #
     claudeSandboxed
     pkgs.claude-monitor
+    # lsp: https://opencode.ai/docs/lsp/
+    pkgs.opencode
+    pkgs.javaPackages.compiler.openjdk25 # requirement for opencode built-in java lsp
+    pkgs.nixd # nix lsp
+
   ];
 }
