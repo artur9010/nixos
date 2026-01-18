@@ -22,7 +22,6 @@
     ./system/ai.nix
     ./system/apps/ledger-live.nix
     ./system/apps/yafi.nix
-    # ./system/apps/eufymake-studio.nix
   ];
 
   # Bootloader.
@@ -38,11 +37,16 @@
     };
 
     kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [
+      "amdgpu.cwsr_enable=0" # thanks to amd and their shitty driver, https://community.frame.work/t/attn-critical-bugs-in-amdgpu-driver-included-with-kernel-6-18-x-6-19-x/79221
+    ];
     blacklistedKernelModules = [
       "hid_lg_g15" # psuje sterowanie jasnoscia wewnetrznego ekranu jak mam podpiete glosniki
     ];
   };
 
+  boot.kernel.sysctl."kernel.core_pattern" = "/dev/null"; # disable coredumps
+  boot.kernel.sysctl."net.ipv4.tcp_congestion_control" = "bbr"; # sounds like something that can help with drops on mobile conn, https://jdecourval.com/ArchLinux/Xiaomi-RedmiBook-Pro-15-2023#sysctls
   boot.initrd.luks.devices."luks-baccf639-6b86-41fe-8ec3-a2ecb815b6a1".device =
     "/dev/disk/by-uuid/baccf639-6b86-41fe-8ec3-a2ecb815b6a1";
   networking.hostName = "ramapraca";

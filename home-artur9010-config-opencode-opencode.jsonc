@@ -1,0 +1,15 @@
+// ~/.config/opencode/opencode.jsonc
+{
+  "plugin": [
+    // auth plugins
+    "opencode-antigravity-auth@beta",
+    "opencode-anthropic-auth@0.0.9", // https://github.com/anomalyco/opencode-anthropic-auth
+    // safety lol
+    "opencode-devcontainers",
+    "cc-safety-net",
+    // keep last as maintainer suggests
+    "@tarquinen/opencode-dcp@latest"
+  ],
+  "$schema": "https://opencode.ai/config.json"
+}
+

@@ -23,54 +23,54 @@
     (config.boot.kernelPackages.callPackage ./../pkgs/ryzen_smu { })
   ];
 
-  powerManagement.powertop.enable = true;
-  services.thermald.enable = true;
-  # https://search.nixos.org/options?channel=25.05&query=tuned
-  services.tuned = {
-    enable = true;
-    profiles = {
-      framework-powersave = {
-        main = {
-          include = "laptop-battery-powersave";
-        };
-        video = {
-          "radeon_powersave" = "dpm-battery";
-          "panel_power_savings" = "1";
-        };
-      };
-      framework-balanced = {
-        main = {
-          include = "desktop";
-        };
-        video = {
-          "radeon_powersave" = "dpm-balanced"; # default: "dpm-balance,auto"
-        };
-      };
-      framework-performance = {
-        main = {
-          include = "throughput-performance";
-        };
-        video = {
-          "radeon_powersave" = "dpm-performance";
-        };
-        script = {
-          "script" = "\${i:PROFILE_DIR}/fanduty.sh";
-        };
-      };
-    };
-    ppdSettings = {
-      battery = {
-        balanced = "framework-balanced";
-      };
-      profiles = {
-        balanced = "framework-balanced";
-        performance = "framework-performance";
-        power-saver = "framework-powersave";
-      };
-    };
-  };
-  services.power-profiles-daemon.enable = false; # conflicts with tuned
-  services.tlp.enable = false; # conflicts with tuned
+  # powerManagement.powertop.enable = true;
+  # services.thermald.enable = true;
+  # # https://search.nixos.org/options?channel=25.05&query=tuned
+  # services.tuned = {
+  #   enable = true;
+  #   profiles = {
+  #     framework-powersave = {
+  #       main = {
+  #         include = "laptop-battery-powersave";
+  #       };
+  #       video = {
+  #         "radeon_powersave" = "dpm-battery";
+  #         "panel_power_savings" = "1";
+  #       };
+  #     };
+  #     framework-balanced = {
+  #       main = {
+  #         include = "desktop";
+  #       };
+  #       video = {
+  #         "radeon_powersave" = "dpm-balanced"; # default: "dpm-balance,auto"
+  #       };
+  #     };
+  #     framework-performance = {
+  #       main = {
+  #         include = "throughput-performance";
+  #       };
+  #       video = {
+  #         "radeon_powersave" = "dpm-performance";
+  #       };
+  #       script = {
+  #         "script" = "\${i:PROFILE_DIR}/fanduty.sh";
+  #       };
+  #     };
+  #   };
+  #   ppdSettings = {
+  #     battery = {
+  #       balanced = "framework-balanced";
+  #     };
+  #     profiles = {
+  #       balanced = "framework-balanced";
+  #       performance = "framework-performance";
+  #       power-saver = "framework-powersave";
+  #     };
+  #   };
+  # };
+  # services.power-profiles-daemon.enable = true;
+  # services.tlp.enable = false; # conflicts with tuned
 
   # Custom tuned scripts
   environment.etc = {
