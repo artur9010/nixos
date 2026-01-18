@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI agents when working with code in this repository.
 
 ## Commands
 
@@ -49,12 +49,11 @@ config.boot.kernelPackages.callPackage ./pkgs/module-name { }
 - Include `gobject-introspection` and `wrapGAppsHook4` in nativeBuildInputs
 - Add desktop files via `makeDesktopItem` and `copyDesktopItems`
 
-**Sandboxed CLI wrappers** (see `system/ai.nix`):
-- Use `writeShellScriptBin` with `systemd-run` for isolated execution
-- Pattern restricts filesystem access while allowing specific paths
-
 ### Power Management
-Uses `tuned` daemon with custom Framework-specific profiles (framework-powersave, framework-balanced, framework-performance) instead of power-profiles-daemon or tlp. Profiles are mapped to power-profiles-daemon interface via `ppdSettings`. Custom scripts go in `/etc/tuned/profiles/`.
+Currently uses `ananicy-cpp` for process prioritization and custom scripts for fan control/charging limits.
+- `ryzen_smu` kernel module is used for Ryzen adjustment support.
+- Charge limit is set to 80% via `fw-ectool`.
+- `tuned` configuration is present but currently disabled (commented out).
 
 ### Conventions
 - If a tool is not available, use `nix-shell -p <package>` to get it
