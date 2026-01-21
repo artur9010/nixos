@@ -11,7 +11,6 @@
     luanti
 
     # moddin stuff
-    nexusmods-app
     limo
 
     # lossless scaling - https://github.com/PancakeTAS/lsfg-vk

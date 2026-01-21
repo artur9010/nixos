@@ -29,7 +29,7 @@
     loader = {
       systemd-boot = {
         enable = true;
-        consoleMode = "2"; # fajnie jest moc cos przeczytac na ekranie
+        consoleMode = "2"; # a bit bigger font.
       };
       efi = {
         canTouchEfiVariables = true;
@@ -41,7 +41,7 @@
       "amdgpu.cwsr_enable=0" # thanks to amd and their shitty driver, https://community.frame.work/t/attn-critical-bugs-in-amdgpu-driver-included-with-kernel-6-18-x-6-19-x/79221
     ];
     blacklistedKernelModules = [
-      "hid_lg_g15" # psuje sterowanie jasnoscia wewnetrznego ekranu jak mam podpiete glosniki
+      "hid_lg_g15" # breaks internal screen brightness control when external logitech z10 speakers are connected
     ];
   };
 
@@ -127,7 +127,18 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     nixfmt
+    cifs-utils
   ];
+
+  fileSystems."/mnt/media" = {
+    device = "//tower.vpn.craftum.pl/media";
+    fsType = "cifs";
+    options = [
+      "guest"
+      "nofail"
+      "_netdev"
+    ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
