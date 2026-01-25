@@ -21,7 +21,6 @@
     ./system/dev.nix
     ./system/apps/ledger-live.nix
     ./system/apps/yafi.nix
-    ./system/apps/termora.nix
   ];
 
   # Bootloader.
