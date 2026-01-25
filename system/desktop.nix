@@ -38,6 +38,11 @@
     mumble
   ];
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = false; # keep bluetooth powered off by default
+  };
+
   # Remove unneeded shortcuts
   # https://discourse.nixos.org/t/manage-printers-in-applications-list-while-cups-disabled/55909/2
   environment.extraSetup = ''

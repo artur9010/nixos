@@ -19,7 +19,7 @@
     ./system/locale.nix
     ./system/gaming.nix
     ./system/virtualization.nix
-    ./system/ai.nix
+    ./system/dev.nix
     ./system/apps/ledger-live.nix
     ./system/apps/yafi.nix
   ];
@@ -30,6 +30,9 @@
       systemd-boot = {
         enable = true;
         consoleMode = "2"; # a bit bigger font.
+        configurationLimit = 50; # keep last 50 gens in menu
+        edk2-uefi-shell.enable = true;
+        memtest86.enable = true;
       };
       efi = {
         canTouchEfiVariables = true;
@@ -60,19 +63,6 @@
     "flakes"
   ];
 
-  # scx scheduler disabled - it's performance-focused and hurts battery life
-  # ananicy-cpp in powermanagement.nix handles process prioritization instead
-  services.scx.enable = false;
-
-  # Docker with socket activation - only starts when actually used
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = false; # Don't start on boot, use socket activation instead
-  };
-
-  # Bluetooth
-  hardware.bluetooth.enable = true;
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -102,7 +92,6 @@
     extraGroups = [
       "networkmanager"
       "wheel"
-      "docker"
       "dialout" # access to serial ports
     ];
   };

@@ -26,5 +26,17 @@ in
 
     ## mcps
     playwright-mcp
+
+    ## OTHER
+    podman-compose # for `docker compose` compat
   ];
+
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+    };
+  };
 }

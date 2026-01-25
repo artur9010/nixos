@@ -53,4 +53,8 @@
     package = pkgs.ananicy-cpp;
     rulesProvider = pkgs.ananicy-rules-cachyos;
   };
+
+  # scx scheduler disabled - it's performance-focused and hurts battery life
+  # ananicy-cpp handles process prioritization instead
+  services.scx.enable = false;
 }
