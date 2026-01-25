@@ -13,9 +13,12 @@
       settings = {
         battery_id = "BAT1"; # upower -e
         animation = "doom";
-        doom_fire_height = "3";
+        doom_fire_height = "4";
         box_title = "─  Łelkom to rama.praca  ─";
         bigclock = "en";
+        min_refresh_delta = "41"; # keep it at ~24FPS, default delta is 5ms
+        edge_margin = "2"; # well, framework screen is curved.
+        hide_version_string = "true";
       };
     };
   };
