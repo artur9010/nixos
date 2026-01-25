@@ -105,19 +105,6 @@
       "docker"
       "dialout" # access to serial ports
     ];
-    packages = with pkgs; [
-      #
-      vscode
-      thunderbird
-      # chattin
-      telegram-desktop
-      mumble
-      lmstudio
-      # devel
-      jetbrains.idea
-      jetbrains.datagrip
-      maven
-    ];
   };
 
   # Allow unfree packages
@@ -135,8 +122,21 @@
     fsType = "cifs";
     options = [
       "guest"
+      "ro"
       "nofail"
       "_netdev"
+
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=30s"
+
+      # mount after tailscale starts and before tailscale goes down
+      "x-systemd.requires=tailscaled.service"
+      "x-systemd.after=tailscaled.service"
+      "x-systemd.before=tailscaled.service"
+
+      # shorten mount timeouts
+      "x-systemd.mount-timeout=10s"
+      "x-systemd.device-timeout=10s"
     ];
   };
 

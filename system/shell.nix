@@ -33,8 +33,8 @@
     rclone
     rsync
     restic
-    usbutils #lsusb
-    pciutils #lspci
+    usbutils # lsusb
+    pciutils # lspci
     dig
     gnumake
     jq

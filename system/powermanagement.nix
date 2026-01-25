@@ -24,72 +24,6 @@
   ];
 
   # powerManagement.powertop.enable = true;
-  # services.thermald.enable = true;
-  # # https://search.nixos.org/options?channel=25.05&query=tuned
-  # services.tuned = {
-  #   enable = true;
-  #   profiles = {
-  #     framework-powersave = {
-  #       main = {
-  #         include = "laptop-battery-powersave";
-  #       };
-  #       video = {
-  #         "radeon_powersave" = "dpm-battery";
-  #         "panel_power_savings" = "1";
-  #       };
-  #     };
-  #     framework-balanced = {
-  #       main = {
-  #         include = "desktop";
-  #       };
-  #       video = {
-  #         "radeon_powersave" = "dpm-balanced"; # default: "dpm-balance,auto"
-  #       };
-  #     };
-  #     framework-performance = {
-  #       main = {
-  #         include = "throughput-performance";
-  #       };
-  #       video = {
-  #         "radeon_powersave" = "dpm-performance";
-  #       };
-  #       script = {
-  #         "script" = "\${i:PROFILE_DIR}/fanduty.sh";
-  #       };
-  #     };
-  #   };
-  #   ppdSettings = {
-  #     battery = {
-  #       balanced = "framework-balanced";
-  #     };
-  #     profiles = {
-  #       balanced = "framework-balanced";
-  #       performance = "framework-performance";
-  #       power-saver = "framework-powersave";
-  #     };
-  #   };
-  # };
-  # services.power-profiles-daemon.enable = true;
-  # services.tlp.enable = false; # conflicts with tuned
-
-  # Custom tuned scripts
-  environment.etc = {
-    "tuned/profiles/framework-performance/fanduty.sh" = {
-      text = ''
-        #!${pkgs.bash}/bin/bash
-        case "$1" in
-          start)
-            ${lib.getExe pkgs.fw-ectool} fanduty 100
-          ;;
-          stop)
-            ${lib.getExe pkgs.fw-ectool} autofanctrl
-          ;;
-        esac
-      '';
-
-      mode = "0755";
-    };
-  };
 
   # Lock charging to 80%
   systemd.services.fw-ectool-charge-limit = {
@@ -99,6 +33,17 @@
     serviceConfig = {
       Type = "oneshot";
       ExecStart = "${lib.getExe pkgs.fw-ectool} fwchargelimit 80";
+    };
+  };
+
+  # Override that stupid 15W power limit.
+  systemd.services.ryzenadj-on-boot = {
+    description = "Override TDP limit";
+    after = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${lib.getExe pkgs.ryzenadj} -a 30000 -b 30000 -c 30000";
     };
   };
 

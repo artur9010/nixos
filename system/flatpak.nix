@@ -22,7 +22,7 @@
 
       # gaming
       "io.github.streetpea.Chiaki4deck" # grajdworzec zdalny kubus play
-      
+
       # other
       "com.usebottles.bottles"
       "org.remmina.Remmina"

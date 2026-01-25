@@ -7,10 +7,16 @@
 
 {
   services.displayManager = {
-    # sddm has some weird issues with launching plasma session, it crashes after a minute of wait, idk why, gdm works fine anyway
-    gdm = {
+    ly = {
       enable = true;
-      banner = "rama.praca najlepszy kąkuter";
+      x11Support = false;
+      settings = {
+        battery_id = "BAT1"; # upower -e
+        animation = "doom";
+        doom_fire_height = "3";
+        box_title = "─  Łelkom to rama.praca  ─";
+        bigclock = "en";
+      };
     };
   };
 
@@ -20,16 +26,13 @@
     };
   };
 
-  services.gnome = {
-    gnome-keyring.enable = true; 
-  };
-
   environment.systemPackages = with pkgs; [
-    # apps
     vlc
     brave
     anydesk
-    zed-editor
+    thunderbird
+    telegram-desktop
+    mumble
   ];
 
   # Remove unneeded shortcuts
@@ -38,6 +41,12 @@
     rm -f $out/share/applications/cups.desktop
     rm -f $out/share/applications/nixos-manual.desktop
   '';
+
+  # Remove unneded kde apps
+  environment.plasma6.excludePackages = with pkgs; [
+    kdePackages.kmenuedit
+    kdePackages.khelpcenter
+  ];
 
   # Fix for Electron apps scaling on Wayland
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
@@ -48,7 +57,6 @@
     pkgs.writeShellScript "reset-touchpad" ''
       case "$1" in
         pre)
-          # Try the common culprits; harmless if not loaded
           ${pkgs.kmod}/bin/modprobe -r i2c_hid_acpi i2c_hid hid_multitouch 2>/dev/null || true
           ;;
         post)

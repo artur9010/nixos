@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.1.7-git-20250809";
+  version = "0.1.7-git-20260124";
 
   ## Upstream has not been merging PRs.
   ## Nixpkgs maintainers are providing a
@@ -15,8 +15,8 @@ let
   src = fetchFromGitHub {
     owner = "amkillam";
     repo = "ryzen_smu";
-    rev = "172c316f53ac8f066afd7cb9e1da517084273368";
-    hash = "sha256-i8T0+kUYsFMzYO3h6ffUXP1fgGOXymC4Ml2dArQLOdk=";
+    rev = "d3bfbe97623a2a26c46c5b88b2053cfa2b08e91a";
+    hash = "sha256-KHdNGWA1+ZRQ8mzC1AI7gyqqeTyIKyouwxVSyEEheE8=";
   };
 
   monitor-cpu = stdenv.mkDerivation {

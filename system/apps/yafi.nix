@@ -30,14 +30,14 @@ let
 
   yafi = pkgs.python3Packages.buildPythonApplication rec {
     pname = "yafi";
-    version = "0.6";
+    version = "0.7";
     pyproject = true;
 
     src = pkgs.fetchFromGitHub {
       owner = "Steve-Tech";
       repo = "YAFI";
       rev = version;
-      hash = "sha256-rLUXhKdKbA9WwUNBonZmHjCPt86wBmeduSSqWt4lliU=";
+      hash = "sha256-d6A54k+njvUfQaVDjAz+uoO6ErEn/aNyzH4uH+ww9m0=";
     };
 
     build-system = [ pkgs.python3Packages.setuptools ];
@@ -66,7 +66,11 @@ let
         exec = "yafi";
         icon = "au.stevetech.yafi";
         categories = [ "Utility" ];
-        keywords = [ "Framework" "EC" "Embedded Controller" ];
+        keywords = [
+          "Framework"
+          "EC"
+          "Embedded Controller"
+        ];
         startupNotify = true;
       })
     ];
