@@ -10,7 +10,6 @@
 # https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/performance_tuning_guide/chap-red_hat_enterprise_linux-performance_tuning_guide-tuned
 
 {
-  # Ryzenadj
   environment.systemPackages = with pkgs; [
     ryzenadj
     powertop
@@ -20,7 +19,7 @@
 
   # Use a fork of ryzen_smu that supports newer CPUs, ryzenadj requires it.
   boot.extraModulePackages = [
-    (config.boot.kernelPackages.callPackage ./../pkgs/ryzen_smu { })
+    (config.boot.kernelPackages.callPackage ./../../pkgs/ryzen_smu { })
   ];
 
   # powerManagement.powertop.enable = true;
@@ -41,9 +40,10 @@
     description = "Override TDP limit";
     after = [ "multi-user.target" ];
     wantedBy = [ "multi-user.target" ];
+    # Values based on https://github.com/AlxHnr/amd-ryzen-ignore-stapm
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${lib.getExe pkgs.ryzenadj} -a 30000 -b 30000 -c 30000";
+      ExecStart = "${lib.getExe pkgs.ryzenadj} --stapm-limit 43000 --fast-limit 53000 --slow-limit 43000";
     };
   };
 

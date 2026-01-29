@@ -8,20 +8,26 @@
 
 {
   imports = [
-    ./system/hardware-configuration.nix
-    ./system/vpn.nix
-    ./system/powermanagement.nix
-    ./system/desktop.nix
-    ./system/shell.nix
-    ./system/apple-fonts.nix
-    ./system/flatpak.nix
-    ./system/locale.nix
-    ./system/gaming.nix
-    ./system/virtualization.nix
-    ./system/dev.nix
-    ./system/apps/ledger-live.nix
-    ./system/apps/yafi.nix
+    ./hardware-configuration.nix
+    ./vpn.nix
+    ./powermanagement.nix
+    ./desktop.nix
+    ./shell.nix
+    ./apple-fonts.nix
+    ./flatpak.nix
+    ./locale.nix
+    ./gaming.nix
+    ./virtualization.nix
+    ./dev.nix
+    ./apps/ledger-live.nix
+    ./apps/yafi.nix
   ];
+
+  # cachyos kernel binary cache
+  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
+  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+
+  nixpkgs.config.allowUnfree = true;
 
   # Bootloader.
   boot = {
@@ -38,7 +44,8 @@
       };
     };
 
-    kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-zen4; # see nixpkgs overlay in flake.nix
     kernelParams = [
       "amdgpu.cwsr_enable=0" # thanks to amd and their shitty driver, https://community.frame.work/t/attn-critical-bugs-in-amdgpu-driver-included-with-kernel-6-18-x-6-19-x/79221
     ];
@@ -95,11 +102,6 @@
     ];
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     nixfmt
     cifs-utils

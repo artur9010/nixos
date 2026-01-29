@@ -29,6 +29,9 @@
     };
   };
 
+  # labwc
+  programs.labwc.enable = true;
+
   environment.systemPackages = with pkgs; [
     vlc
     brave
@@ -36,6 +39,9 @@
     thunderbird
     telegram-desktop
     mumble
+
+    # labwc
+    waybar
   ];
 
   hardware.bluetooth = {
