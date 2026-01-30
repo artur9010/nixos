@@ -11,7 +11,7 @@ let
 
     src = pkgs.fetchurl {
       url = "https://github.com/java-decompiler/jd-gui/releases/download/v${version}/jd-gui-${version}.jar";
-      hash = "sha256-02zwb9l8j0fmf0rhmlmrw08jmyybxzv6i7qkhir8lhq6igx3x79c";
+      hash = "sha256-LJ0++osGQ4pyhBOfaPbvy/sqEeC50gozcNUBiWha/As=";
     };
 
     dontUnpack = true;

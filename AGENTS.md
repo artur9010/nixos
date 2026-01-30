@@ -19,6 +19,10 @@ nix-shell -p nixfmt --run "nixfmt file.nix"
 
 # Update flake inputs
 nix flake update
+
+# IMPORTANT: When adding new files, always add them to git before building:
+git add <new-files>
+git add <modified-configs>
 ```
 
 ## Architecture
@@ -59,3 +63,8 @@ Currently uses `ananicy-cpp` for process prioritization and custom scripts for f
 - If a tool is not available, use `nix-shell -p <package>` to get it
 - Comments may be in Polish
 - User account: `artur9010`
+
+## Important Notes
+
+- **DO NOT PUSH** to the repository unless explicitly told to by the user
+- Always add new files and modified configurations to git before running nixos-rebuild
