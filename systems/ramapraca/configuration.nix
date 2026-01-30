@@ -21,6 +21,7 @@
     ./dev.nix
     ./apps/ledger-live.nix
     ./apps/yafi.nix
+    ./apps/jd-gui.nix
   ];
 
   # cachyos kernel binary cache
