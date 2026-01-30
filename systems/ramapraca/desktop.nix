@@ -31,6 +31,7 @@
 
   # labwc
   programs.labwc.enable = true;
+  environment.etc."xdg/labwc".source = "/home/artur9010/nixos/systems/ramapraca/etc/xdg/labwc";
 
   environment.systemPackages = with pkgs; [
     vlc
@@ -42,6 +43,7 @@
 
     # labwc
     waybar
+    wlr-randr
   ];
 
   hardware.bluetooth = {
