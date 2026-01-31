@@ -68,4 +68,7 @@ Currently uses `ananicy-cpp` for process prioritization and custom scripts for f
 
 - **DO NOT PUSH** to the repository unless explicitly told to by the user
 - Always add new files and modified configurations to git before running nixos-rebuild
-- **ALWAYS CHECK THE MANUAL** available at `/run/current-system/sw/share/doc/nixos/index.html` for configuration options and documentation
+- **ALWAYS CHECK THE NIXOS MANUAL** available at `/run/current-system/sw/share/doc/nixos/index.html` for configuration options and documentation
+- **ALWAYS CHECK THE NIX MANUAL** available at `/run/current-system/sw/share/doc/nix/manual/index.html` for Nix package manager documentation
+- **MAKE USE OF nixos-mcp tools** to query NixOS packages, options, channels, and documentation directly
+- **ASK AS MANY QUESTIONS AS POSSIBLE** when unsure or needing clarification on requirements, preferences, or implementation choices
