@@ -8,6 +8,12 @@
         "run",
         "github:utensils/mcp-nixos"
       ],
+    },
+    "duckduckgo-mcp": {
+      "type":"local",
+      "command": [
+        "duckduckgo-mcp-server"
+      ],
     }
   },
 }

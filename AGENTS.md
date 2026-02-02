@@ -63,6 +63,10 @@ Currently uses `ananicy-cpp` for process prioritization and custom scripts for f
 - If a tool is not available, use `nix-shell -p <package>` to get it
 - Comments may be in Polish
 - User account: `artur9010`
+- **Always remove** the `result` directory after work is complete
+
+### Available Tools
+- **duckduckgo-mcp_search** - Search the internet for information, documentation, solutions
 
 ## Important Notes
 
@@ -70,5 +74,6 @@ Currently uses `ananicy-cpp` for process prioritization and custom scripts for f
 - Always add new files and modified configurations to git before running nixos-rebuild
 - **ALWAYS CHECK THE NIXOS MANUAL** available at `/run/current-system/sw/share/doc/nixos/index.html` for configuration options and documentation
 - **ALWAYS CHECK THE NIX MANUAL** available at `/run/current-system/sw/share/doc/nix/manual/index.html` for Nix package manager documentation
+- **ALWAYS CHECK THE NIXPKGS MANUAL** available at `/run/current-system/sw/share/doc/nixpkgs/index.html` for package documentation
 - **MAKE USE OF nixos-mcp tools** to query NixOS packages, options, channels, and documentation directly
 - **ASK AS MANY QUESTIONS AS POSSIBLE** when unsure or needing clarification on requirements, preferences, or implementation choices

@@ -22,6 +22,7 @@
     ./apps/ledger-live.nix
     ./apps/yafi.nix
     ./apps/jd-gui.nix
+    ./apps/duckduckgo-mcp-server.nix
   ];
 
   # cachyos kernel binary cache
@@ -105,6 +106,7 @@
 
   environment.systemPackages = with pkgs; [
     nixfmt
+    nixpkgs-manual
     cifs-utils
   ];
 
