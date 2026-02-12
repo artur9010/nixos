@@ -9,10 +9,24 @@ in
     # CODIN
     vscode
     zed-editor
-
     jetbrains.idea
     jetbrains.datagrip
+
+    # java
     maven
+    javaPackages.compiler.openjdk25
+
+    # python
+    python3
+    uv
+    pyright # https://opencode.ai/docs/lsp/
+
+    # nodejs
+    nodejs
+
+    # terraform
+    terraform
+    terraform-ls
 
     # AI DANGER ZONE
     lmstudio
@@ -20,9 +34,7 @@ in
     devcontainer # required for https://github.com/athal7/opencode-devcontainers
 
     ## lsp: https://opencode.ai/docs/lsp/
-    javaPackages.compiler.openjdk25 # requirement for opencode built-in java lsp
     nixd # nix lsp
-    nodejs # provides npx
 
     ## mcps
     playwright-mcp

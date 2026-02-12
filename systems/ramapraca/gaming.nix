@@ -4,9 +4,30 @@
   # Steam
   programs.steam.enable = true;
   programs.gamescope.enable = true;
-  programs.gamemode.enable = true;
+  programs.steam.gamescopeSession.enable = true;
+  hardware.steam-hardware.enable = true; # steam controller udev rules
+
+  # Gamemode
+  programs.gamemode = {
+    enable = true;
+    settings = {
+      general = {
+        desiredgov = "performance";
+        defaultgov = "balanced";
+      };
+
+      custom = {
+        start = "${pkgs.fw-ectool}/bin/ectool fanduty 100";
+        end = "${pkgs.fw-ectool}/bin/ectool autofanctrl";
+      };
+    };
+  };
 
   environment.systemPackages = with pkgs; [
+    # stuff
+    mangohud
+
+    # launchers
     heroic
     prismlauncher
     luanti

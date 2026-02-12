@@ -66,6 +66,8 @@
   # wpa-supplicant is enabled as nixos-hardware module
   networking.networkmanager.enable = true;
 
+  services.hardware.bolt.enable = true;
+
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -101,6 +103,7 @@
       "networkmanager"
       "wheel"
       "dialout" # access to serial ports
+      "gamemode" # see man gamemoded
     ];
   };
 

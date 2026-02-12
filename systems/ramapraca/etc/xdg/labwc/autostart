@@ -1,4 +1,0 @@
-waybar &
-
-# monitor settings
-wlr-randr --output eDP-1 --scale 1.7 --mode 2880x1920@120Hz &

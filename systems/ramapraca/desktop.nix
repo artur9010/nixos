@@ -6,6 +6,7 @@
 }:
 
 {
+  # TODO: try plasma-login-manager after release
   services.displayManager = {
     ly = {
       enable = true;
@@ -14,7 +15,7 @@
         battery_id = "BAT1"; # upower -e
         animation = "doom";
         doom_fire_height = "4";
-        box_title = "─  Łelkom to rama.praca  ─";
+        box_title = "─[  Łelkom to rama.praca  ]─";
         bigclock = "en";
         min_refresh_delta = "41"; # keep it at ~24FPS, default delta is 5ms
         edge_margin = "2"; # well, framework screen is curved.
@@ -29,10 +30,6 @@
     };
   };
 
-  # labwc
-  programs.labwc.enable = true;
-  environment.etc."xdg/labwc".source = "/home/artur9010/nixos/systems/ramapraca/etc/xdg/labwc";
-
   environment.systemPackages = with pkgs; [
     vlc
     brave
@@ -40,15 +37,16 @@
     thunderbird
     telegram-desktop
     mumble
-
-    # labwc
-    waybar
-    wlr-randr
   ];
 
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = false; # keep bluetooth powered off by default
+  };
+
+  hardware.logitech.wireless = {
+    enable = true; # logitech udev rules
+    enableGraphical = true; # solaar app
   };
 
   # Remove unneeded shortcuts
