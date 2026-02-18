@@ -19,7 +19,6 @@
     ./gaming.nix
     ./virtualization.nix
     ./dev.nix
-    ./apps/ledger-live.nix
     ./apps/yafi.nix
     ./apps/jd-gui.nix
     ./apps/duckduckgo-mcp-server.nix
@@ -31,6 +30,7 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  environment.etc.hosts.enable = false;
   # Bootloader.
   boot = {
     loader = {

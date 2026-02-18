@@ -61,7 +61,8 @@ Currently uses `ananicy-cpp` for process prioritization and custom scripts for f
 
 ### Conventions
 - If a tool is not available, use `nix-shell -p <package>` to get it
-- Comments may be in Polish
+- Comments should be written in English
+- If user asks about adding new software and sends URL to git repository, clone it to /tmp for better understandment.
 - User account: `artur9010`
 - **Always remove** the `result` directory after work is complete
 

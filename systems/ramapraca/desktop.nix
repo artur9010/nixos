@@ -37,6 +37,7 @@
     thunderbird
     telegram-desktop
     mumble
+    ledger-live-desktop
   ];
 
   hardware.bluetooth = {
@@ -48,6 +49,9 @@
     enable = true; # logitech udev rules
     enableGraphical = true; # solaar app
   };
+
+  hardware.ledger.enable = true; # udev rules for ledger devices
+  fonts.enableDefaultPackages = true;
 
   # Remove unneeded shortcuts
   # https://discourse.nixos.org/t/manage-printers-in-applications-list-while-cups-disabled/55909/2

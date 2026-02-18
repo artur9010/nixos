@@ -20,6 +20,7 @@ in
     python3
     uv
     pyright # https://opencode.ai/docs/lsp/
+    poetry
 
     # nodejs
     nodejs
