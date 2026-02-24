@@ -113,6 +113,8 @@
     cifs-utils
   ];
 
+  security.sudo-rs.enable = true; # replace sudo with sudo-rs
+
   fileSystems."/mnt/media" = {
     device = "//tower.vpn.craftum.pl/media";
     fsType = "cifs";

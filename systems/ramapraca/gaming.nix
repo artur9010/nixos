@@ -29,6 +29,7 @@
 
     # launchers
     heroic
+    lutris
     prismlauncher
     luanti
 
