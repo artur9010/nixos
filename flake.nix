@@ -28,7 +28,7 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             { nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ]; }
-            
+
             nixos-hardware.nixosModules.framework-13-7040-amd
             nix-flatpak.nixosModules.nix-flatpak
             ./systems/ramapraca/configuration.nix

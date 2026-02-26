@@ -6,6 +6,12 @@
 }:
 
 {
+  boot.plymouth = {
+    enable = true;
+    theme = "breeze"; # setting to "breeze" autoincludes theme package:
+    # A NixOS branded variant of the breeze theme when config.boot.plymouth.theme == "breeze", otherwise [ ].
+  };
+
   # TODO: try plasma-login-manager after release
   services.displayManager = {
     ly = {
@@ -20,6 +26,10 @@
         min_refresh_delta = "41"; # keep it at ~24FPS, default delta is 5ms
         edge_margin = "2"; # well, framework screen is curved.
         hide_version_string = "true";
+
+	# todo: nie dziala 
+        #auto_login_session = "plasma";
+        #auto_login_user = "artur9010";
       };
     };
   };

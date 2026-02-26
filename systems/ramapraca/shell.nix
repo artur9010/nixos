@@ -1,6 +1,16 @@
-{ lib, pkgs, inputs, ... }:
+{
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
+  # https://www.reddit.com/r/kde/comments/1dbelxh/i_cant_for_the_life_of_me_use_ctrl_alt_fn_keys_to/
+  services.kmscon = {
+    enable = true;
+  };
+
   programs.zsh = {
     enable = true;
     syntaxHighlighting = {

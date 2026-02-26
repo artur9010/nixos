@@ -6,11 +6,9 @@
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [
-    gnome-boxes
-  ];
-
-  users.groups.libvirtd.members = [ "artur9010" ];
-  virtualisation.libvirtd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
+  virtualisation.virtualbox.host = {
+    enable = true;
+    enableExtensionPack = true;
+  };
+  users.groups.vboxusers.members = [ "artur9010" ];
 }
