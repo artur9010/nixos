@@ -32,7 +32,6 @@ in
     # AI DANGER ZONE
     lmstudio
     opencode
-    devcontainer # required for https://github.com/athal7/opencode-devcontainers
 
     ## lsp: https://opencode.ai/docs/lsp/
     nixd # nix lsp

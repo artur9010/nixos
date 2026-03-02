@@ -34,11 +34,11 @@
   # Bootloader.
   boot = {
     loader = {
-      systemd-boot = {
+      grub = {
         enable = true;
-        consoleMode = "2"; # a bit bigger font.
-        configurationLimit = 50; # keep last 50 gens in menu
-        edk2-uefi-shell.enable = true;
+        efiSupport = true;
+        device = "nodev"; # "nodev" is used for UEFI
+        configurationLimit = 50;
         memtest86.enable = true;
       };
       efi = {

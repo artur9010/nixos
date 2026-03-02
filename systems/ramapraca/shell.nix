@@ -7,6 +7,7 @@
 
 {
   # https://www.reddit.com/r/kde/comments/1dbelxh/i_cant_for_the_life_of_me_use_ctrl_alt_fn_keys_to/
+  # TODO: nie pomoglo
   services.kmscon = {
     enable = true;
   };

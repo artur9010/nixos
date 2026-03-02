@@ -48,6 +48,7 @@
     telegram-desktop
     mumble
     ledger-live-desktop
+    dorion # discord client; https://spikehd.dev/projects/dorion/
   ];
 
   hardware.bluetooth = {
