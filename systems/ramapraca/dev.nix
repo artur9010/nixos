@@ -32,6 +32,7 @@ in
     # AI DANGER ZONE
     lmstudio
     opencode
+    opencode-desktop
 
     ## lsp: https://opencode.ai/docs/lsp/
     nixd # nix lsp
