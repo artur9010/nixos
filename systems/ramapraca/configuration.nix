@@ -19,9 +19,7 @@
     ./gaming.nix
     ./virtualization.nix
     ./dev.nix
-    ./apps/yafi.nix
     ./apps/jd-gui.nix
-    ./apps/duckduckgo-mcp-server.nix
   ];
 
   # cachyos kernel binary cache
