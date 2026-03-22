@@ -11,6 +11,7 @@ in
     zed-editor
     jetbrains.idea
     jetbrains.datagrip
+    android-studio
 
     # java
     maven
