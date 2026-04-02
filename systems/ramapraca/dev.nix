@@ -38,6 +38,10 @@ in
     ## lsp: https://opencode.ai/docs/lsp/
     nixd # nix lsp
 
+    # radicle
+    radicle-node
+    radicle-desktop
+
     ## mcps
     playwright-mcp
 
