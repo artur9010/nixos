@@ -46,9 +46,6 @@
 
     # kernelPackages = pkgs.linuxPackages_latest;
     kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-zen4; # see nixpkgs overlay in flake.nix
-    kernelParams = [
-      "amdgpu.cwsr_enable=0" # thanks to amd and their shitty driver, https://community.frame.work/t/attn-critical-bugs-in-amdgpu-driver-included-with-kernel-6-18-x-6-19-x/79221
-    ];
     blacklistedKernelModules = [
       "hid_lg_g15" # breaks internal screen brightness control when external logitech z10 speakers are connected
     ];
@@ -64,12 +61,23 @@
   # wpa-supplicant is enabled as nixos-hardware module
   networking.networkmanager.enable = true;
 
+  # Thunderbolt
   services.hardware.bolt.enable = true;
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix = {
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 30d";
+    };
+
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      auto-optimise-store = true;
+    };
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -145,5 +153,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
-
 }
