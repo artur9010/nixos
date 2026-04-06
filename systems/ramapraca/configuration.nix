@@ -26,6 +26,9 @@
   nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
   nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
 
+  # https://lix.systems/
+  nix.package = pkgs.lixPackageSets.latest.lix;
+
   nixpkgs.config.allowUnfree = true;
 
   environment.etc.hosts.enable = false;
