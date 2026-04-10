@@ -49,6 +49,9 @@
 
     # kernelPackages = pkgs.linuxPackages_latest;
     kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-zen4; # see nixpkgs overlay in flake.nix
+    kernelParams = [
+      "amdgpu.cwsr_enable=0" # thanks to amd and their shitty driver, https://community.frame.work/t/attn-critical-bugs-in-amdgpu-driver-included-with-kernel-6-18-x-6-19-x/79221
+    ];
     blacklistedKernelModules = [
       "hid_lg_g15" # breaks internal screen brightness control when external logitech z10 speakers are connected
     ];

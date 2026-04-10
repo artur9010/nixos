@@ -34,6 +34,7 @@ in
     lmstudio
     opencode
     opencode-desktop
+    snip # https://github.com/edouard-claude/snip
 
     ## lsp: https://opencode.ai/docs/lsp/
     nixd # nix lsp
