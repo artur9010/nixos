@@ -1,6 +1,8 @@
 { lib, pkgs, ... }:
 
 {
+  boot.kernelModules = [ "ntsync" ];
+  
   # Steam
   programs.steam.enable = true;
   programs.gamescope.enable = true;

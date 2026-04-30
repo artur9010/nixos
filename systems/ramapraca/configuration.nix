@@ -13,7 +13,6 @@
     ./powermanagement.nix
     ./desktop.nix
     ./shell.nix
-    ./apple-fonts.nix
     ./flatpak.nix
     ./locale.nix
     ./gaming.nix
@@ -29,7 +28,8 @@
   # https://lix.systems/
   nix.package = pkgs.lixPackageSets.latest.lix;
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true; # allow unfree packages
+  hardware.enableRedistributableFirmware = true; # allow unfree firmware
 
   environment.etc.hosts.enable = false;
   # Bootloader.

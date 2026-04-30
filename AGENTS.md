@@ -32,7 +32,6 @@ NixOS flake configuration for a Framework 13 7040 AMD laptop. Single host config
 ### Flake Inputs
 - `nixpkgs` (nixos-unstable)
 - `nixos-hardware` (framework-13-7040-amd module)
-- `apple-fonts` (SF Pro, SF Mono, NY fonts)
 - `nix-flatpak` (declarative flatpak with bindfs for font sharing)
 
 ### Module Structure
