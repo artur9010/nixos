@@ -32,7 +32,7 @@ NixOS flake configuration for a Framework 13 7040 AMD laptop. Single host config
 ### Flake Inputs
 - `nixpkgs` (nixos-unstable)
 - `nixos-hardware` (framework-13-7040-amd module)
-- `nix-flatpak` (declarative flatpak with bindfs for font sharing)
+- `nix-flatpak` (declarative flatpak)
 
 ### Module Structure
 - `configuration.nix` - main entry point, imports all modules from `system/`
@@ -56,7 +56,6 @@ config.boot.kernelPackages.callPackage ./pkgs/module-name { }
 Currently uses `ananicy-cpp` for process prioritization and custom scripts for fan control/charging limits.
 - `ryzen_smu` kernel module is used for Ryzen adjustment support.
 - Charge limit is set to 80% via `fw-ectool`.
-- `tuned` configuration is present but currently disabled (commented out).
 
 ### Conventions
 - If a tool is not available, use `nix-shell -p <package>` to get it
@@ -64,9 +63,6 @@ Currently uses `ananicy-cpp` for process prioritization and custom scripts for f
 - If user asks about adding new software and sends URL to git repository, clone it to /tmp for better understandment.
 - User account: `artur9010`
 - **Always remove** the `result` directory after work is complete
-
-### Available Tools
-- **duckduckgo-mcp_search** - Search the internet for information, documentation, solutions
 
 ## Important Notes
 

@@ -6,12 +6,6 @@
 }:
 
 {
-  # https://www.reddit.com/r/kde/comments/1dbelxh/i_cant_for_the_life_of_me_use_ctrl_alt_fn_keys_to/
-  # TODO: nie pomoglo
-  services.kmscon = {
-    enable = true;
-  };
-
   programs.zsh = {
     enable = true;
     syntaxHighlighting = {
@@ -42,7 +36,7 @@
     wget
     btop-rocm
     git
-    dua
+    dua # a biiiiit faster ncdu
     rclone
     rsync
     restic
@@ -66,9 +60,4 @@
     sops
     ktop
   ];
-
-  programs.bash.shellAliases = {
-    ncdu = "dua i";
-  };
-
 }

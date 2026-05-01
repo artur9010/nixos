@@ -34,12 +34,5 @@
     lutris
     prismlauncher
     luanti
-
-    # moddin stuff
-    limo
-
-    # lossless scaling - https://github.com/PancakeTAS/lsfg-vk
-    lsfg-vk
-    lsfg-vk-ui
   ];
 }

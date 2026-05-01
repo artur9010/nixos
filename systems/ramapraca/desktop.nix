@@ -8,8 +8,7 @@
 {
   boot.plymouth = {
     enable = true;
-    theme = "breeze"; # setting to "breeze" autoincludes theme package:
-    # A NixOS branded variant of the breeze theme when config.boot.plymouth.theme == "breeze", otherwise [ ].
+    theme = "breeze";
   };
 
   # TODO: try plasma-login-manager after release
@@ -26,10 +25,6 @@
         min_refresh_delta = "41"; # keep it at ~24FPS, default delta is 5ms
         edge_margin = "2"; # well, framework screen is curved.
         hide_version_string = "true";
-
-	# todo: nie dziala 
-        #auto_login_session = "plasma";
-        #auto_login_user = "artur9010";
       };
     };
   };
@@ -41,14 +36,16 @@
   };
 
   environment.systemPackages = with pkgs; [
-    vlc
     brave
     anydesk
     thunderbird
     telegram-desktop
-    mumble
+    mumble # TODO: should be fine to migrate to flatpak?
     ledger-live-desktop
-    dorion # discord client; https://spikehd.dev/projects/dorion/
+  ];
+
+  services.flatpak.packages = [
+    "com.cherry_ai.CherryStudio"
   ];
 
   hardware.bluetooth = {
@@ -73,8 +70,11 @@
 
   # Remove unneded kde apps
   environment.plasma6.excludePackages = with pkgs; [
-    kdePackages.kmenuedit
+    kdePackages.kmenuedit # it's still there ._.
     kdePackages.khelpcenter
+    kdePackages.elisa
+    kdePackages.kate
+    kdePackages.qrca # why i would even need a qr scanner on fkin laptop?
   ];
 
   # Fix for Electron apps scaling on Wayland

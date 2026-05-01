@@ -8,10 +8,6 @@ in
 
     # CODIN
     vscode
-    zed-editor
-    jetbrains.idea
-    jetbrains.datagrip
-    android-studio
 
     # java
     maven
@@ -33,8 +29,6 @@ in
     # AI DANGER ZONE
     lmstudio
     opencode
-    opencode-desktop
-    snip # https://github.com/edouard-claude/snip
 
     ## lsp: https://opencode.ai/docs/lsp/
     nixd # nix lsp
@@ -58,4 +52,10 @@ in
       dates = "weekly";
     };
   };
+
+  services.flatpak.packages = [
+    "com.jetbrains.IntelliJ-IDEA-Ultimate"
+    "com.jetbrains.DataGrip"
+    "com.google.AndroidStudio"
+  ];
 }

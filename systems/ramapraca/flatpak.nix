@@ -16,7 +16,7 @@
     };
 
     packages = [
-      "one.ablaze.floorp" # web browser
+      "org.mozilla.firefox"
       "org.onlyoffice.desktopeditors"
       "io.github.kolunmi.Bazaar"
 
@@ -26,7 +26,14 @@
       # other
       "com.usebottles.bottles"
       "org.remmina.Remmina"
-      "org.gimp.GIMP"
+      "org.kde.krita"
+      "im.riot.Riot" # element
+      "com.prusa3d.PrusaSlicer"
+      "org.videolan.VLC"
     ];
   };
+
+  environment.systemPackages = with pkgs; [
+    kdePackages.flatpak-kcm # settings integration
+  ];
 }

@@ -4,11 +4,6 @@
   config,
   ...
 }:
-
-# Useful links:
-# radeon_powersave - https://documentation.suse.com/sles/15-SP7/html/SLES-all/cha-tuning-tuned.html
-# https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/performance_tuning_guide/chap-red_hat_enterprise_linux-performance_tuning_guide-tuned
-
 {
   environment.systemPackages = with pkgs; [
     ryzenadj

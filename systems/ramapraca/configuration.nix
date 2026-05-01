@@ -18,7 +18,6 @@
     ./gaming.nix
     ./virtualization.nix
     ./dev.nix
-    ./apps/jd-gui.nix
   ];
 
   # cachyos kernel binary cache
@@ -151,6 +150,17 @@
   };
 
   programs.ssh.startAgent = true; # enable ssh agent
+
+  # virtualbox build fails, https://github.com/NixOS/nixpkgs/issues/513245
+  nixpkgs.overlays = [
+    # Skipping tests while upstream sorts it out, revert once
+    # Hydra consistently builds openldap green.
+    (final: prev: {
+      openldap = prev.openldap.overrideAttrs (_: {
+        doCheck = false;
+      });
+    })
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
