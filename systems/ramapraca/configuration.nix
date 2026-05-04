@@ -18,20 +18,14 @@
     ./gaming.nix
     ./virtualization.nix
     ./dev.nix
+    ./i2p.nix
   ];
-
-  # cachyos kernel binary cache
-  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
-  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
-
-  # https://lix.systems/
-  nix.package = pkgs.lixPackageSets.latest.lix;
 
   nixpkgs.config.allowUnfree = true; # allow unfree packages
   hardware.enableRedistributableFirmware = true; # allow unfree firmware
 
   environment.etc.hosts.enable = false;
-  # Bootloader.
+
   boot = {
     loader = {
       grub = {
@@ -39,11 +33,16 @@
         efiSupport = true;
         device = "nodev"; # "nodev" is used for UEFI
         configurationLimit = 50;
+        theme = "${pkgs.kdePackages.breeze-grub}/grub/themes/breeze";
         memtest86.enable = true;
       };
       efi = {
         canTouchEfiVariables = true;
       };
+    };
+    plymouth = {
+      enable = true;
+      theme = "breeze";
     };
 
     # kernelPackages = pkgs.linuxPackages_latest;
@@ -54,22 +53,24 @@
     blacklistedKernelModules = [
       "hid_lg_g15" # breaks internal screen brightness control when external logitech z10 speakers are connected
     ];
+    kernel.sysctl = {
+      "kernel.core_pattern" = "/dev/null"; # disable coredumps
+    };
+
+    initrd.luks.devices."luks-baccf639-6b86-41fe-8ec3-a2ecb815b6a1".device =
+      "/dev/disk/by-uuid/baccf639-6b86-41fe-8ec3-a2ecb815b6a1";
   };
 
-  boot.kernel.sysctl."kernel.core_pattern" = "/dev/null"; # disable coredumps
-  boot.kernel.sysctl."net.ipv4.tcp_congestion_control" = "bbr"; # sounds like something that can help with drops on mobile conn, https://jdecourval.com/ArchLinux/Xiaomi-RedmiBook-Pro-15-2023#sysctls
-  boot.initrd.luks.devices."luks-baccf639-6b86-41fe-8ec3-a2ecb815b6a1".device =
-    "/dev/disk/by-uuid/baccf639-6b86-41fe-8ec3-a2ecb815b6a1";
-  networking.hostName = "ramapraca";
-
-  # Enable networking
-  # wpa-supplicant is enabled as nixos-hardware module
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "ramapraca";
+    networkmanager.enable = true; # + wpa-supplicant that is already enabled in nixos-hardware framework module
+  };
 
   # Thunderbolt
   services.hardware.bolt.enable = true;
 
   nix = {
+    package = pkgs.lixPackageSets.latest.lix; # replace nix with lix - https://lix.systems/
     gc = {
       automatic = true;
       options = "--delete-older-than 30d";
@@ -81,6 +82,10 @@
         "flakes"
       ];
       auto-optimise-store = true;
+
+      # cachyos kernel binary cache
+      substituters = [ "https://attic.xuyh0120.win/lantian" ];
+      trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
     };
   };
 
@@ -125,29 +130,6 @@
   ];
 
   security.sudo-rs.enable = true; # replace sudo with sudo-rs
-
-  fileSystems."/mnt/media" = {
-    device = "//tower.vpn.craftum.pl/media";
-    fsType = "cifs";
-    options = [
-      "guest"
-      "ro"
-      "nofail"
-      "_netdev"
-
-      "x-systemd.automount"
-      "x-systemd.idle-timeout=30s"
-
-      # mount after tailscale starts and before tailscale goes down
-      "x-systemd.requires=tailscaled.service"
-      "x-systemd.after=tailscaled.service"
-      "x-systemd.before=tailscaled.service"
-
-      # shorten mount timeouts
-      "x-systemd.mount-timeout=10s"
-      "x-systemd.device-timeout=10s"
-    ];
-  };
 
   programs.ssh.startAgent = true; # enable ssh agent
 

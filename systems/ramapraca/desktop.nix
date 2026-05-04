@@ -6,37 +6,29 @@
 }:
 
 {
-  boot.plymouth = {
-    enable = true;
-    theme = "breeze";
-  };
-
-  # TODO: try plasma-login-manager after release
-  services.displayManager = {
-    ly = {
-      enable = true;
-      x11Support = false;
-      settings = {
-        battery_id = "BAT1"; # upower -e
-        animation = "doom";
-        doom_fire_height = "4";
-        box_title = "─[  Łelkom to rama.praca  ]─";
-        bigclock = "en";
-        min_refresh_delta = "41"; # keep it at ~24FPS, default delta is 5ms
-        edge_margin = "2"; # well, framework screen is curved.
-        hide_version_string = "true";
-      };
-    };
-  };
-
+  # KDE base
+  services.displayManager.plasma-login-manager.enable = true;
   services.desktopManager = {
     plasma6 = {
       enable = true;
     };
   };
+  environment.plasma6.excludePackages = with pkgs; [
+    kdePackages.kmenuedit # it's still there ._.
+    kdePackages.khelpcenter
+    kdePackages.elisa
+    kdePackages.kate
+    kdePackages.qrca # why i would even need a qr scanner on fkin laptop?
+  ];
+  environment.extraSetup = ''
+    rm -f $out/share/applications/nixos-manual.desktop
+  '';
+
+  # Fonts
+  fonts.enableDefaultPackages = true;
 
   environment.systemPackages = with pkgs; [
-    brave
+    brave # TODO: move to flatpak
     anydesk
     thunderbird
     telegram-desktop
@@ -50,7 +42,6 @@
 
   hardware.bluetooth = {
     enable = true;
-    powerOnBoot = false; # keep bluetooth powered off by default
   };
 
   hardware.logitech.wireless = {
@@ -59,29 +50,13 @@
   };
 
   hardware.ledger.enable = true; # udev rules for ledger devices
-  fonts.enableDefaultPackages = true;
-
-  # Remove unneeded shortcuts
-  # https://discourse.nixos.org/t/manage-printers-in-applications-list-while-cups-disabled/55909/2
-  environment.extraSetup = ''
-    rm -f $out/share/applications/cups.desktop
-    rm -f $out/share/applications/nixos-manual.desktop
-  '';
-
-  # Remove unneded kde apps
-  environment.plasma6.excludePackages = with pkgs; [
-    kdePackages.kmenuedit # it's still there ._.
-    kdePackages.khelpcenter
-    kdePackages.elisa
-    kdePackages.kate
-    kdePackages.qrca # why i would even need a qr scanner on fkin laptop?
-  ];
 
   # Fix for Electron apps scaling on Wayland
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
   environment.sessionVariables.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
 
   # Workaround for touchpad not working sometimes after sleep, idk why. Module reload helps...
+  # TODO: verify is still required
   environment.etc."systemd/system-sleep/reset-touchpad".source =
     pkgs.writeShellScript "reset-touchpad" ''
       case "$1" in

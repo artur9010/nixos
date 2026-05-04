@@ -30,8 +30,6 @@
   };
   users.defaultUserShell = lib.getExe pkgs.zsh;
 
-  programs.command-not-found.enable = true;
-
   environment.systemPackages = with pkgs; [
     wget
     btop-rocm

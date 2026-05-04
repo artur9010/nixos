@@ -17,8 +17,6 @@
     (config.boot.kernelPackages.callPackage ./../../pkgs/ryzen_smu { })
   ];
 
-  # powerManagement.powertop.enable = true;
-
   # Lock charging to 80%
   systemd.services.fw-ectool-charge-limit = {
     description = "Set FW ECTOOL charge limit to 80%";
