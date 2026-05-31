@@ -42,6 +42,7 @@ in
 
     ## OTHER
     podman-compose # for `docker compose` compat
+    ghidra-bin
   ];
 
   virtualisation.podman = {
