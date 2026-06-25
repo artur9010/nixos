@@ -18,7 +18,6 @@
     ./gaming.nix
     ./virtualization.nix
     ./dev.nix
-    ./i2p.nix
   ];
 
   nixpkgs.config.allowUnfree = true; # allow unfree packages
@@ -70,7 +69,6 @@
   services.hardware.bolt.enable = true;
 
   nix = {
-    package = pkgs.lixPackageSets.latest.lix; # replace nix with lix - https://lix.systems/
     gc = {
       automatic = true;
       options = "--delete-older-than 30d";
@@ -84,11 +82,11 @@
       auto-optimise-store = true;
 
       # cachyos kernel binary cache
-      substituters = [ "https://attic.xuyh0120.win/lantian" ];
+      substituters = [ "s3://nix-store?profile=seaweedfs-motyka-pro&scheme=https&endpoint=s3.motyka.pro" "https://attic.xuyh0120.win/lantian" ];
       trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
     };
   };
-
+  
   # Enable CUPS to print documents.
   services.printing.enable = true;
 

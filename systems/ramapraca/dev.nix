@@ -43,6 +43,10 @@ in
     ## OTHER
     podman-compose # for `docker compose` compat
     ghidra-bin
+
+    ## smieciowe telefonu
+    pmbootstrap
+    heimdall
   ];
 
   virtualisation.podman = {
