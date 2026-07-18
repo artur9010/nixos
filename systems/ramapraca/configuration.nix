@@ -44,8 +44,7 @@
       theme = "breeze";
     };
 
-    # kernelPackages = pkgs.linuxPackages_latest;
-    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-zen4; # see nixpkgs overlay in flake.nix
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "amdgpu.cwsr_enable=0" # thanks to amd and their shitty driver, https://community.frame.work/t/attn-critical-bugs-in-amdgpu-driver-included-with-kernel-6-18-x-6-19-x/79221
     ];
@@ -130,17 +129,6 @@
   security.sudo-rs.enable = true; # replace sudo with sudo-rs
 
   programs.ssh.startAgent = true; # enable ssh agent
-
-  # virtualbox build fails, https://github.com/NixOS/nixpkgs/issues/513245
-  nixpkgs.overlays = [
-    # Skipping tests while upstream sorts it out, revert once
-    # Hydra consistently builds openldap green.
-    (final: prev: {
-      openldap = prev.openldap.overrideAttrs (_: {
-        doCheck = false;
-      });
-    })
-  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

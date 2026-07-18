@@ -5,7 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release"; # nick wzbudza zaufanie
   };
 
   outputs =
@@ -14,7 +13,6 @@
       nixpkgs,
       nixos-hardware,
       nix-flatpak,
-      nix-cachyos-kernel,
       ...
     }@inputs:
     let
@@ -26,8 +24,6 @@
         ramapraca = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            { nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ]; }
-
             nixos-hardware.nixosModules.framework-13-7040-amd
             nix-flatpak.nixosModules.nix-flatpak
             ./systems/ramapraca/configuration.nix
