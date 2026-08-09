@@ -25,6 +25,7 @@
 
   environment.etc.hosts.enable = false;
 
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   boot = {
     loader = {
       grub = {
@@ -128,7 +129,7 @@
 
   security.sudo-rs.enable = true; # replace sudo with sudo-rs
 
-  programs.ssh.startAgent = true; # enable ssh agent
+  # programs.ssh.startAgent = true; # enable ssh agent
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

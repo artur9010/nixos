@@ -12,6 +12,9 @@
     plasma6 = {
       enable = true;
     };
+    cosmic = {
+      enable = true;
+    };
   };
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.kmenuedit # it's still there ._.

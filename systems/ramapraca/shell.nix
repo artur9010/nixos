@@ -57,5 +57,8 @@
     awscli
     sops
     ktop
+
+    # other shit
+    zerofs
   ];
 }
