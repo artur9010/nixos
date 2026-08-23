@@ -17,18 +17,6 @@
     (config.boot.kernelPackages.callPackage ./../../pkgs/ryzen_smu { })
   ];
 
-  # Override that stupid 15W power limit.
-  systemd.services.ryzenadj-on-boot = {
-    description = "Override TDP limit";
-    after = [ "multi-user.target" ];
-    wantedBy = [ "multi-user.target" ];
-    # Values based on https://github.com/AlxHnr/amd-ryzen-ignore-stapm
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${lib.getExe pkgs.ryzenadj} --stapm-limit 43000 --fast-limit 53000 --slow-limit 43000";
-    };
-  };
-
   # Ananicy
   services.ananicy = {
     enable = true;

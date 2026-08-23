@@ -7,14 +7,17 @@
 
 {
   # KDE base
-  services.displayManager.plasma-login-manager.enable = true;
+  # services.displayManager.plasma-login-manager.enable = true;
   services.desktopManager = {
     plasma6 = {
       enable = true;
     };
-    cosmic = {
-      enable = true;
-    };
+  };
+
+  # XFCE (experimental Wayland session, labwc compositor)
+  services.xserver.desktopManager.xfce = {
+    enable = true;
+    enableWaylandSession = true;
   };
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.kmenuedit # it's still there ._.
@@ -37,6 +40,8 @@
     telegram-desktop
     mumble # TODO: should be fine to migrate to flatpak?
     ledger-live-desktop
+
+    xfce4-whiskermenu-plugin
   ];
 
   services.flatpak.packages = [
