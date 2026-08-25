@@ -18,6 +18,7 @@
     ./gaming.nix
     ./virtualization.nix
     ./dev.nix
+    ./solaar-battery.nix
   ];
 
   nixpkgs.config.allowUnfree = true; # allow unfree packages
@@ -82,11 +83,14 @@
       auto-optimise-store = true;
 
       # cachyos kernel binary cache
-      substituters = [ "s3://nix-store?profile=seaweedfs-motyka-pro&scheme=https&endpoint=s3.motyka.pro" "https://attic.xuyh0120.win/lantian" ];
+      substituters = [
+        "s3://nix-store?profile=seaweedfs-motyka-pro&scheme=https&endpoint=s3.motyka.pro"
+        "https://attic.xuyh0120.win/lantian"
+      ];
       trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
     };
   };
-  
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
