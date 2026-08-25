@@ -156,7 +156,7 @@ def parse_solaar_output(text):
         battery_match = BATTERY_RE.match(line)
         if battery_match:
             pct = int(battery_match.group(1))
-            status = battery_match.group(2).split(".")[-1].rstrip(".").upper()
+            status = battery_match.group(2).rstrip(".").split(".")[-1].upper()
             charging = 1 if any(s in status for s in STATUS_CHARGING) else 0
             battery = (pct, charging)
     commit()

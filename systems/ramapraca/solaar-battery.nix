@@ -16,7 +16,7 @@
     wantedBy = [ "multi-user.target" ];
     after = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.python3}/bin/python3 ${./solaar-battery-uhid.py} --interval 60 --solaar-bin ${pkgs.solaar}/bin/solaar";
+      ExecStart = "${pkgs.python3}/bin/python3 ${./solaar-battery-uhid.py} --interval 5 --solaar-bin ${pkgs.solaar}/bin/solaar";
       Restart = "always";
       RestartSec = "10s";
       ConditionPathExists = [ "/dev/uhid" ];
