@@ -35,15 +35,24 @@ HID_MAX_DESCRIPTOR_SIZE = 4096
 UHID_DATA_MAX = 4096
 
 # The kernel (drivers/hid/hid-input.c) only wires up an HID battery when the
-# device passes IS_INPUT_APPLICATION(): the top-level application collection
-# must be a Consumer Control one.  The Play/Pause key bit is required because
-# battery (EV_PWR) usages alone leave the input device "unpopulated", which
-# makes hidinput_connect() unwind and stops all input report processing.
-# Input report layout: [charging(1), percent(1), key bit + padding(1)].
+# device passes IS_INPUT_APPLICATION(); a Mouse application qualifies.
+# Real mouse bits (buttons 1-3 + REL_X/Y) are required for two reasons:
+# 1. battery (EV_PWR) usages alone leave the input device "unpopulated",
+#    which makes hidinput_connect() unwind and stops all report processing;
+# 2. udev's input_id tags the input node ID_INPUT_MOUSE=1 only for mouse
+#    buttons + relative axes, and UPower derives the battery kind (mouse)
+#    from that sibling tag. Buttons map to BTN_LEFT.. only under a
+#    Mouse/Pointer application, not under Consumer Control.
+# Input report layout (5 bytes):
+#   [0] charging (0/1)          usage 0x00850044
+#   [1] percent (0-100)         usage 0x00850065
+#   [2] buttons bit 0..2 + pad  (always 0)
+#   [3] X relative (int8)       (always 0)
+#   [4] Y relative (int8)       (always 0)
 REPORT_DESCRIPTOR = bytes(
     [
-        0x05, 0x0C,          # Usage Page (Consumer)
-        0x09, 0x01,          # Usage (Consumer Control)
+        0x05, 0x01,          # Usage Page (Generic Desktop)
+        0x09, 0x02,          # Usage (Mouse)
         0xA1, 0x01,          # Collection (Application)
         0x05, 0x85,          #   Usage Page (Battery System)
         0x15, 0x00,          #   Logical Minimum (0)
@@ -58,17 +67,28 @@ REPORT_DESCRIPTOR = bytes(
         0x75, 0x08,          #   Report Size (8)
         0x95, 0x01,          #   Report Count (1)
         0x81, 0x02,          #   Input (Data, Var, Abs)
-        0x05, 0x0C,          #   Usage Page (Consumer)
-        0x09, 0xCD,          #   Usage (Play/Pause)
+        0x05, 0x09,          #   Usage Page (Button)
+        0x19, 0x01,          #   Usage Minimum (Button 1)
+        0x29, 0x03,          #   Usage Maximum (Button 3)
+        0x15, 0x00,          #   Logical Minimum (0)
+        0x25, 0x01,          #   Logical Maximum (1)
         0x75, 0x01,          #   Report Size (1)
-        0x95, 0x01,          #   Report Count (1)
+        0x95, 0x03,          #   Report Count (3)
         0x81, 0x02,          #   Input (Data, Var, Abs)
-        0x95, 0x07,          #   Report Count (7)
+        0x95, 0x05,          #   Report Count (5)
         0x81, 0x03,          #   Input (Const, Var, Abs) padding
+        0x05, 0x01,          #   Usage Page (Generic Desktop)
+        0x09, 0x30,          #   Usage (X)
+        0x09, 0x31,          #   Usage (Y)
+        0x15, 0x81,          #   Logical Minimum (-127)
+        0x25, 0x7F,          #   Logical Maximum (127)
+        0x75, 0x08,          #   Report Size (8)
+        0x95, 0x02,          #   Report Count (2)
+        0x81, 0x06,          #   Input (Data, Var, Rel)
         0xC0,                # End Collection
     ]
 )
-REPORT_SIZE = 3
+REPORT_SIZE = 5
 
 
 class UhidCreate2Req(ctypes.Structure):
@@ -178,7 +198,7 @@ class VirtualBattery:
         self.name = name
         self.uniq = uniq
         self.report_state = bytearray(
-            [1 if charging else 0, percent, 0]
+            [1 if charging else 0, percent, 0, 0, 0]
         )
         self.fd = os.open(uhid_path, os.O_RDWR | os.O_NONBLOCK | os.O_CLOEXEC)
         event = UhidEvent()
