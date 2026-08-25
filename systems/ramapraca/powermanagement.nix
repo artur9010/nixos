@@ -6,15 +6,9 @@
 }:
 {
   environment.systemPackages = with pkgs; [
-    ryzenadj
     powertop
     fw-ectool
     lm_sensors
-  ];
-
-  # Use a fork of ryzen_smu that supports newer CPUs, ryzenadj requires it.
-  boot.extraModulePackages = [
-    (config.boot.kernelPackages.callPackage ./../../pkgs/ryzen_smu { })
   ];
 
   # Ananicy

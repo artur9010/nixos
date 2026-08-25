@@ -14,11 +14,6 @@
     };
   };
 
-  # XFCE (experimental Wayland session, labwc compositor)
-  services.xserver.desktopManager.xfce = {
-    enable = true;
-    enableWaylandSession = true;
-  };
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.kmenuedit # it's still there ._.
     kdePackages.khelpcenter
@@ -40,8 +35,6 @@
     telegram-desktop
     mumble # TODO: should be fine to migrate to flatpak?
     ledger-live-desktop
-
-    xfce4-whiskermenu-plugin
   ];
 
   services.flatpak.packages = [
@@ -52,10 +45,8 @@
     enable = true;
   };
 
-  hardware.logitech.wireless = {
-    enable = true; # logitech udev rules
-    enableGraphical = true; # solaar app
-  };
+  hardware.logitech.wireless.enable = true; # logitech udev rules
+  programs.solaar.enable = true; # logitech battery monitor
 
   hardware.ledger.enable = true; # udev rules for ledger devices
 

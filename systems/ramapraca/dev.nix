@@ -60,7 +60,6 @@ in
 
   services.flatpak.packages = [
     "com.jetbrains.IntelliJ-IDEA-Ultimate"
-    "com.jetbrains.DataGrip"
     "com.google.AndroidStudio"
   ];
 }

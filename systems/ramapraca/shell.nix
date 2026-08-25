@@ -56,9 +56,6 @@
     kubernetes-helm
     awscli
     sops
-    ktop
-
-    # other shit
-    zerofs
+    kubectl-ktop
   ];
 }

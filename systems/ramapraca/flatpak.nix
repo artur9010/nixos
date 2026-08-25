@@ -25,11 +25,14 @@
 
       # other
       "com.usebottles.bottles"
-      "org.remmina.Remmina"
       "org.kde.krita"
       "im.riot.Riot" # element
       "com.prusa3d.PrusaSlicer"
       "org.videolan.VLC"
+      "md.obsidian.Obsidian"
+      "io.github.zingytomato.netpeek"
+      "org.grayjay.Grayjay"
+
     ];
   };
 
