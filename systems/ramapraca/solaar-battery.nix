@@ -1,7 +1,5 @@
 {
-  config,
   pkgs,
-  lib,
   ...
 }:
 {
@@ -10,6 +8,8 @@
   # can display them. Needed until the stock kernel's hid-logitech-dj supports
   # the Bolt receiver.
   boot.kernelModules = [ "uhid" ];
+
+  programs.solaar.enable = true; # used by python script
 
   systemd.services.solaar-battery-uhid = {
     description = "Bridge Solaar battery readings to virtual HID batteries";

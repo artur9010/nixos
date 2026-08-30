@@ -1,8 +1,5 @@
 {
-  config,
   pkgs,
-  lib,
-  hardware,
   ...
 }:
 
@@ -41,10 +38,6 @@
         canTouchEfiVariables = true;
       };
     };
-    plymouth = {
-      enable = true;
-      theme = "breeze";
-    };
 
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
@@ -82,12 +75,11 @@
       ];
       auto-optimise-store = true;
 
-      # cachyos kernel binary cache
+      # binary cache
       substituters = [
         "s3://nix-store?profile=seaweedfs-motyka-pro&scheme=https&endpoint=s3.motyka.pro"
-        "https://attic.xuyh0120.win/lantian"
       ];
-      trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+      trusted-public-keys = [ ];
     };
   };
 

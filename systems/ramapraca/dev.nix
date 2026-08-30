@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
 
@@ -7,7 +7,7 @@ in
   environment.systemPackages = with pkgs; [
 
     # CODIN
-    vscode
+    zed-editor
 
     # java
     maven

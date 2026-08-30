@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   # VPN
@@ -10,6 +10,6 @@
     enable = true;
   };
   environment.systemPackages = with pkgs; [
-    mullvad-vpn
+    mullvad-vpn # gui for mullvad service
   ];
 }

@@ -36,26 +36,10 @@ NixOS flake configuration for a Framework 13 7040 AMD laptop. Single host config
 
 ### Module Structure
 - `configuration.nix` - main entry point, imports all modules from `system/`
-- `system/*.nix` - feature modules (desktop, shell, gaming, powermanagement, etc.)
-- `system/apps/*.nix` - application-specific modules with custom packaging
-- `pkgs/` - custom packages (kernel modules, patched packages)
-
-### Custom Package Patterns
-
-**Kernel modules** (see `pkgs/ryzen_smu/`):
-```nix
-config.boot.kernelPackages.callPackage ./pkgs/module-name { }
-```
-
-**Python applications with GTK** (see `system/apps/yafi.nix`):
-- Use `buildPythonApplication` with `pyproject = true`
-- Include `gobject-introspection` and `wrapGAppsHook4` in nativeBuildInputs
-- Add desktop files via `makeDesktopItem` and `copyDesktopItems`
+- `systems/ramapraca/*.nix` - feature modules (desktop, shell, gaming, powermanagement, etc.)
 
 ### Power Management
 Currently uses `ananicy-cpp` for process prioritization and custom scripts for fan control/charging limits.
-- `ryzen_smu` kernel module is used for Ryzen adjustment support.
-- Charge limit is set to 80% via `fw-ectool`.
 
 ### Conventions
 - If a tool is not available, use `nix-shell -p <package>` to get it
