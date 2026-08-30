@@ -15,7 +15,7 @@
     ./gaming.nix
     ./virtualization.nix
     ./dev.nix
-    ./solaar-battery.nix
+    ./logitech-battery-uhid.nix
   ];
 
   nixpkgs.config.allowUnfree = true; # allow unfree packages

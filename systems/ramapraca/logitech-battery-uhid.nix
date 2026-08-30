@@ -3,20 +3,18 @@
   ...
 }:
 {
-  # Bridge Solaar battery readings (Bolt/BT Logitech devices) into the kernel
+  # Bridge Logitech battery readings (Bolt/BT/hidpp devices) into the kernel
   # as virtual HID batteries, so UPower and the KDE Power and Battery applet
   # can display them. Needed until the stock kernel's hid-logitech-dj supports
-  # the Bolt receiver.
+  # the Bolt receiver. Talks HID++ directly over hidraw, no Solaar needed.
   boot.kernelModules = [ "uhid" ];
 
-  programs.solaar.enable = true; # used by python script
-
-  systemd.services.solaar-battery-uhid = {
-    description = "Bridge Solaar battery readings to virtual HID batteries";
+  systemd.services.logitech-battery-uhid = {
+    description = "Bridge Logitech battery readings to virtual HID batteries";
     wantedBy = [ "multi-user.target" ];
     after = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.python3}/bin/python3 ${./solaar-battery-uhid.py} --interval 5 --solaar-bin ${pkgs.solaar}/bin/solaar";
+      ExecStart = "${pkgs.python3}/bin/python3 ${./logitech-battery-uhid.py} --interval 5";
       Restart = "always";
       RestartSec = "10s";
       ConditionPathExists = [ "/dev/uhid" ];
