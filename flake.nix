@@ -19,6 +19,16 @@
       inherit (self) outputs;
     in
     {
+      packages = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          karton = pkgs.callPackage ./pkgs/karton { };
+        }
+      );
+
       # sudo nixos-rebuild switch --flake .#ramapraca
       nixosConfigurations = {
         ramapraca = nixpkgs.lib.nixosSystem {
