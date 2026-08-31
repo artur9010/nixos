@@ -1,0 +1,24 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // /nix: read-only (store inspection), /tmp: read-write (scratch space)
+  "permission": {
+    "read": {
+      "/nix": "allow",
+      "/nix/**": "allow",
+      "/tmp": "allow",
+      "/tmp/**": "allow"
+    },
+    "edit": {
+      "/nix": "deny",
+      "/nix/**": "deny",
+      "/tmp": "allow",
+      "/tmp/**": "allow"
+    },
+    "external_directory": {
+      "/nix": "allow",
+      "/nix/**": "allow",
+      "/tmp": "allow",
+      "/tmp/**": "allow"
+    }
+  }
+}

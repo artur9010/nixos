@@ -1,0 +1,29 @@
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+@@ -24,6 +24,7 @@
+  *
+  */
+ 
++#include <linux/moduleparam.h>
+ #include <linux/vmalloc.h>
+ #include <drm/display/drm_dp_helper.h>
+ #include <drm/display/drm_dp_mst_helper.h>
+@@ -825,12 +826,18 @@
+ 	.poll_hpd_irq = dm_handle_mst_down_rep_msg_ready,
+ };
+ 
++static bool amdgpu_dm_mst = true;
++module_param_named(mst, amdgpu_dm_mst, bool, 0444);
++MODULE_PARM_DESC(mst, "Enable DisplayPort MST topology support (0 = force SST on all DP links)");
++
+ void amdgpu_dm_initialize_dp_connector(struct amdgpu_display_manager *dm,
+ 				       struct amdgpu_dm_connector *aconnector,
+ 				       int link_index)
+ {
+ 	struct dc_link_settings max_link_enc_cap = {0};
+ 
++	aconnector->dc_link->preferred_training_settings.mst_enable = &amdgpu_dm_mst;
++
+ 	aconnector->dm_dp_aux.aux.name =
+ 		kasprintf(GFP_KERNEL, "AMDGPU DM aux hw bus %d",
+ 			  link_index);

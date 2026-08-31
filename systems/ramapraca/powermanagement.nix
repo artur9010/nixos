@@ -7,6 +7,8 @@
     powertop
     fw-ectool
     lm_sensors
+    ryzenadj
+    ryzen-monitor-ng
   ];
 
   # Ananicy

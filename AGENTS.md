@@ -2,6 +2,11 @@
 
 This file provides guidance to AI agents when working with code in this repository.
 
+## IMPORTANT: THIS IS NOT A NIXOS YOU KNOW
+
+User is currently running rolling-release NixOS from `unstable` nixpkgs branch.
+Do not use your own memory, access `/nix` directory to view source files by yourself.
+
 ## Commands
 
 ```bash

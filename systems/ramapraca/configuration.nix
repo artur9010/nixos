@@ -16,10 +16,12 @@
     ./virtualization.nix
     ./dev.nix
     ./logitech-battery-uhid.nix
+    ./nix-ld.nix
   ];
 
   nixpkgs.config.allowUnfree = true; # allow unfree packages
   hardware.enableRedistributableFirmware = true; # allow unfree firmware
+  nix.settings.trusted-users = [ "root" "@wheel" ];
 
   environment.etc.hosts.enable = false;
 
@@ -40,8 +42,22 @@
     };
 
     kernelPackages = pkgs.linuxPackages_latest;
+    kernelPatches = [
+      {
+        # Adds amdgpu.mst kernel module parameter (default: enabled).
+        # Upstream hook (preferred_training_settings.mst_enable) exists but is
+        # not wired to any parameter on Linux.
+        # (hooman input) amd is a $750B company ran by morons who can't fix their broken drivers for 3 years, thanks amd, fuck you.
+        name = "amdgpu-mst-toggle";
+        patch = ./amdgpu-mst-toggle.patch;
+      }
+    ];
     kernelParams = [
       "amdgpu.cwsr_enable=0" # thanks to amd and their shitty driver, https://community.frame.work/t/attn-critical-bugs-in-amdgpu-driver-included-with-kernel-6-18-x-6-19-x/79221
+      # HP TB Dock G2 (MST hub) fails sideband handshake + link training over
+      # USB4 DP tunnel (amdgpu "Failed to ack MST event", "enabling link failed: 15").
+      # Force SST everywhere; single monitor still works via the dock's first DP output.
+      "amdgpu.mst=0"
     ];
     blacklistedKernelModules = [
       "hid_lg_g15" # breaks internal screen brightness control when external logitech z10 speakers are connected
@@ -61,6 +77,9 @@
 
   # Thunderbolt
   services.hardware.bolt.enable = true;
+
+  # Firmware updates (Framework BIOS + possibly the HP dock via LVFS)
+  services.fwupd.enable = true;
 
   nix = {
     gc = {

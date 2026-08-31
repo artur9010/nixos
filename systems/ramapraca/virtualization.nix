@@ -4,10 +4,10 @@
   ...
 }:
 {
-  virtualisation.virtualbox.host = {
-    enable = true;
-    enableExtensionPack = true;
-  };
+  # virtualisation.virtualbox.host = {
+  #   enable = true;
+  #   enableExtensionPack = true;
+  # };
   users.groups.vboxusers.members = [ "artur9010" ];
 
   # Karton - KDE virtual machine manager (talks to qemu:///session)
