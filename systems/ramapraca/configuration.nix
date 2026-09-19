@@ -17,11 +17,15 @@
     ./dev.nix
     ./logitech-battery-uhid.nix
     ./nix-ld.nix
+    ./ankerctl.nix
   ];
 
   nixpkgs.config.allowUnfree = true; # allow unfree packages
   hardware.enableRedistributableFirmware = true; # allow unfree firmware
-  nix.settings.trusted-users = [ "root" "@wheel" ];
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+  ];
 
   environment.etc.hosts.enable = false;
 

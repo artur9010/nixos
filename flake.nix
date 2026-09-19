@@ -26,6 +26,7 @@
         in
         {
           karton = pkgs.callPackage ./pkgs/karton { };
+          ankerctl = pkgs.callPackage ./pkgs/ankerctl { };
         }
       );
 
