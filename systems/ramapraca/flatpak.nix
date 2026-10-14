@@ -17,9 +17,6 @@
       "org.onlyoffice.desktopeditors"
       "io.github.kolunmi.Bazaar"
 
-      # gaming
-      "io.github.streetpea.Chiaki4deck" # grajdworzec zdalny kubus play
-
       # other
       "com.usebottles.bottles"
       "org.kde.krita"
@@ -27,7 +24,6 @@
       "com.prusa3d.PrusaSlicer"
       "org.videolan.VLC"
       "md.obsidian.Obsidian"
-      "io.github.zingytomato.netpeek"
       "org.grayjay.Grayjay"
 
     ];

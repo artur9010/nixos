@@ -13,11 +13,9 @@
     ./flatpak.nix
     ./locale.nix
     ./gaming.nix
-    ./virtualization.nix
     ./dev.nix
     ./logitech-battery-uhid.nix
-    ./nix-ld.nix
-    ./ankerctl.nix
+    ./kernel
   ];
 
   nixpkgs.config.allowUnfree = true; # allow unfree packages
@@ -45,17 +43,6 @@
       };
     };
 
-    kernelPackages = pkgs.linuxPackages_latest;
-    kernelPatches = [
-      {
-        # Adds amdgpu.mst kernel module parameter (default: enabled).
-        # Upstream hook (preferred_training_settings.mst_enable) exists but is
-        # not wired to any parameter on Linux.
-        # (hooman input) amd is a $750B company ran by morons who can't fix their broken drivers for 3 years, thanks amd, fuck you.
-        name = "amdgpu-mst-toggle";
-        patch = ./amdgpu-mst-toggle.patch;
-      }
-    ];
     kernelParams = [
       "amdgpu.cwsr_enable=0" # thanks to amd and their shitty driver, https://community.frame.work/t/attn-critical-bugs-in-amdgpu-driver-included-with-kernel-6-18-x-6-19-x/79221
       # HP TB Dock G2 (MST hub) fails sideband handshake + link training over
@@ -148,7 +135,7 @@
 
   security.sudo-rs.enable = true; # replace sudo with sudo-rs
 
-  # programs.ssh.startAgent = true; # enable ssh agent
+  programs.ssh.startAgent = true; # enable ssh agent
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

@@ -16,7 +16,6 @@ in
     # python
     python3
     uv
-    pyright # https://opencode.ai/docs/lsp/
     poetry
 
     # nodejs
@@ -29,16 +28,19 @@ in
     # AI DANGER ZONE
     lmstudio
     opencode
+    claude-code
 
     ## lsp: https://opencode.ai/docs/lsp/
-    nixd # nix lsp
+    nixd
+    terraform-lsp
+    pyright # python
 
     # radicle
     radicle-node
-    radicle-desktop
 
     ## mcps
     playwright-mcp
+    mcp-nixos
 
     ## OTHER
     podman-compose # for `docker compose` compat
@@ -61,5 +63,9 @@ in
   services.flatpak.packages = [
     "com.jetbrains.IntelliJ-IDEA-Ultimate"
     "com.google.AndroidStudio"
+  ];
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "radicle-node-1.10.3"
   ];
 }
